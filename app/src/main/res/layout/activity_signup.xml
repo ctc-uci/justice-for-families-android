@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".SignupActivity">
     <ImageView
         android:id="@+id/logo"
         android:layout_width="368dp"
@@ -30,67 +29,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="123dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="92dp"
-        android:text="Not a member?"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:layout_constraintVertical_bias="0.031" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="131dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:text="Forgot Password?"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+    <EditText
+        android:id="@+id/editTextTextPassword2"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
-    <TextView
-        android:id="@+id/join_now"
-        android:layout_width="74dp"
-        android:layout_height="21dp"
-        android:text="Join now"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.131"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:layout_constraintVertical_bias="0.031" />
-
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/button"
         android:layout_width="232dp"
         android:layout_height="55dp"
-        android:layout_marginTop="32dp"
-        android:text="Login"
+        android:layout_marginTop="24dp"
+        android:text="Sign Up"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2" />
 
     <EditText
         android:id="@+id/editTextTextPassword"
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -98,5 +69,32 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <TextView
+        android:id="@+id/back_to_login"
+        android:layout_width="69dp"
+        android:layout_height="34dp"
+        android:text="Login"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.038"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.055" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="141dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="96dp"
+        android:text="Already a member?"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.054" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
