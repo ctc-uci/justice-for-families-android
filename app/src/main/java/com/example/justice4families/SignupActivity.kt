@@ -12,4 +12,8 @@ class SignupActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+
+    private fun checkPassword(password:String){
+
+    }
 }
