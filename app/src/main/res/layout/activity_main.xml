@@ -47,3 +47,16 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottomnav_menu" />
+<!--</RelativeLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
