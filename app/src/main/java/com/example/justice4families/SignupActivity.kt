@@ -26,6 +26,23 @@ class SignupActivity : AppCompatActivity() {
         }
         else{
             //make sure characteristics of password is correct
+            if(validatePassword(password1)) {
+                Toast.makeText(this, "Good password", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()
+            }
         }
+    }
+
+    private fun validatePassword(password:String): Boolean {
+        /*
+         Password requirements:
+         Minimum length: 8
+         Require: numbers, special character(!@#$%^&*), uppercase letter, lowercase letter
+         */
+        val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+        var pattern = PASSWORD_PATTERN.toRegex()
+
+        return pattern.matches(password)
     }
 }
