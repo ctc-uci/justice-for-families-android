@@ -1,14 +1,20 @@
 package com.example.justice4families
 
+import android.app.SearchManager
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("start", "START2")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -100,5 +107,32 @@ class MainActivity : AppCompatActivity() {
             val tvNum = v.findViewById<TextView>(R.id.tv_number)
         }
 
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.topnav_menu, menu)
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu?.findItem(R.id.top_search)
+        val searchView = searchItem?.actionView as SearchView
+
+        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+        Log.d("hello","hello2")
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchView.clearFocus()
+                searchView.setQuery("", false)
+                searchItem.collapseActionView()
+                Toast.makeText(this@MainActivity, "looking for $query", Toast.LENGTH_LONG).show()
+                Log.d("hello", "hello")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 }
