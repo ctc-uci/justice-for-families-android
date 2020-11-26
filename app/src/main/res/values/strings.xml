@@ -18,4 +18,11 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="already_a_member">Already a member?</string>
+    <string name="pass_req"> Password must contain at least
+       \n  <li> Eight (8) characters</li>
+       \n  <li> An uppercase character</li>
+       \n  <li> A lowercase character</li>
+       \n  <li> A number</li>
+       \n  <li> A special character (!@#$%^&amp;*)</li></string>
+
 </resources>

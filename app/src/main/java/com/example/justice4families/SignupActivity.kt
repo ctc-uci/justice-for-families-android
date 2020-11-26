@@ -14,21 +14,25 @@ class SignupActivity : AppCompatActivity() {
             onBackPressed()
         }
         signup_button.setOnClickListener {
-            checkPassword(password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
+            checkInfo(email_signup.email_signup_text.text.toString(), password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
         }
     }
 
-    private fun checkPassword(password1:String, password2:String){
-        if(password1.isEmpty() or password2.isEmpty())
-             Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
-        else if(password1!=password2){
-             Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show()
+    private fun checkInfo(email:String, password1:String, password2:String){
+        if(email.isEmpty()){
+            Toast.makeText(this, "Please Enter an Email Address", Toast.LENGTH_LONG).show()
         }
-        else{
-            //make sure characteristics of password is correct
-            if(validatePassword(password1)) {
+        else if(password1.isEmpty() or password2.isEmpty()) {
+            Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
+        }
+        else if (password1 != password2) {
+            Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show()
+        }
+        else {
+            if (validatePassword(password1)) {
                 Toast.makeText(this, "Good password", Toast.LENGTH_LONG).show()
-            } else {
+            }
+            else {
                 Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()
             }
         }
