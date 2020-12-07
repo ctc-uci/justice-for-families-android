@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Justice4Families</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="join_now">Join now</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_a_member">Already a member?</string>
+    <string name="pass_req"> Password must contain at least
+       \n  <li> Eight (8) characters</li>
+       \n  <li> An uppercase character</li>
+       \n  <li> A lowercase character</li>
+       \n  <li> A number</li>
+       \n  <li> A special character (!@#$%^&amp;*)</li></string>
+
 </resources>
