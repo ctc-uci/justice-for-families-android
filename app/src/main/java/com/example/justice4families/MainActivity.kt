@@ -2,20 +2,24 @@ package com.example.justice4families
 
 import android.app.SearchManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONObject
+import java.lang.Exception
+import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,10 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: NumAdapter
     lateinit var layoutManager : LinearLayoutManager
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("start", "START2")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -44,19 +45,18 @@ class MainActivity : AppCompatActivity() {
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 //if (dy > 0) {
-                    val visibleItemCount = layoutManager.childCount
-                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                val visibleItemCount = layoutManager.childCount
+                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                    val total = adapter.itemCount
+                val total = adapter.itemCount
 
-                    if (!isLoading) {
-                        if ((visibleItemCount + pastVisibleItem) >= total) {
-                            page++
-                            getPage()
-                        }
+                if (!isLoading) {
+                    if ((visibleItemCount + pastVisibleItem) >= total) {
+                        page++
+                        getPage()
                     }
+                }
                 //}
-
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
@@ -70,15 +70,16 @@ class MainActivity : AppCompatActivity() {
         val end = page * limit
 
         for (i in start..end) {
-            numberList.add("Item $i")
+
+            updatePost(i.toString())
+
         }
 
         Handler().postDelayed({
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.VISIBLE
             if (::adapter.isInitialized) {
                 adapter.notifyDataSetChanged()
-            }
-            else{
+            } else {
                 adapter = NumAdapter(this)
                 findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
             }
@@ -87,8 +88,26 @@ class MainActivity : AppCompatActivity() {
         }, 2000)
     }
 
+    fun updatePost(i: String)
+    {
+        var url = "https://jsonplaceholder.typicode.com/todos/" + i
+        val thread = Thread {
+            try {
+                var dummyJson = URL(url).readText()
+                val jsonObj = JSONObject(dummyJson)
+                numberList.add(jsonObj.get("title").toString() )
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
+        }
+        thread.start()
+    }
+
+
     // Move to another file
-    class NumAdapter(val activity : MainActivity) : RecyclerView.Adapter<NumAdapter.NumViewHolder>() {
+    class NumAdapter(val activity: MainActivity) : RecyclerView.Adapter<NumAdapter.NumViewHolder>() {
 
         // Return the ViewHolder object
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumViewHolder {
@@ -103,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             holder.tvNum.text = activity.numberList[position]
         }
 
-        class NumViewHolder (v : View) : RecyclerView.ViewHolder(v) {
+        class NumViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val tvNum = v.findViewById<TextView>(R.id.tv_number)
         }
 
@@ -116,16 +135,13 @@ class MainActivity : AppCompatActivity() {
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu?.findItem(R.id.top_search)
         val searchView = searchItem?.actionView as SearchView
-
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
-        Log.d("hello","hello2")
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
                 searchView.setQuery("", false)
                 searchItem.collapseActionView()
                 Toast.makeText(this@MainActivity, "looking for $query", Toast.LENGTH_LONG).show()
-                Log.d("hello", "hello")
                 return true
             }
 
