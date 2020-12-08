@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="500dp"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="32dp"
+    android:paddingBottom="32dp"
+    android:id="@+id/bottom_sheet"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_hideable="true"
+    android:background="@android:color/darker_gray">
+
+
+<!--    placeholders for actual text fields-->
+    <LinearLayout
+        android:id="@+id/create_layout"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/create_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:text="Create Post"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/title_layout"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:text="Title"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mind_layout"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:weightSum="5">
+
+
+        <TextView
+            android:id="@+id/mind_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:text="What's on your mind?"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+

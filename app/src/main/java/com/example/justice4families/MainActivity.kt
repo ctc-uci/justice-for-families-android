@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
@@ -31,9 +34,38 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: NumAdapter
     lateinit var layoutManager : LinearLayoutManager
+
+    //bottom sheet
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottom_sheet: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //bottom sheet expansion
+        bottom_sheet = findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
+        bottomNav = findViewById(R.id.bottom_navigation)
+
+        sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_addpost -> {
+                    sheetBehavior.state = (BottomSheetBehavior.STATE_EXPANDED)
+                }
+                R.id.ic_profile -> {
+                    sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+                }
+                R.id.ic_search -> {
+                    sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+                }
+            }
+            true
+        }
 
         layoutManager = LinearLayoutManager(this)
 
