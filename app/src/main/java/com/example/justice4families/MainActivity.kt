@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,16 +64,22 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        findViewById<Button>(R.id.close_post_modal_button).setOnClickListener {
+            sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+        }
+
+        findViewById<Button>(R.id.post_button).setOnClickListener {
+            sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+        }
+
+
         layoutManager = LinearLayoutManager(this)
 
-        // Might need to add buildFeatures { viewBinding = true } to gradle module
-        // in android {}
         findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
         getPage()
 
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                //if (dy > 0) {
                 val visibleItemCount = layoutManager.childCount
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
@@ -88,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                         getPage()
                     }
                 }
-                //}
                 super.onScrolled(recyclerView, dx, dy)
             }
         })

@@ -14,38 +14,51 @@
 
 
 <!--    placeholders for actual text fields-->
-    <LinearLayout
-        android:id="@+id/create_layout"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/post_and_close_layout"
         android:layout_width="match_parent"
-        android:weightSum="5">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
 
-        <TextView
-            android:id="@+id/create_text"
+        <Button
+            android:id="@+id/close_post_modal_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:color/holo_red_light"
+            android:letterSpacing="0"
+            android:text="X"
+            android:textSize="24sp"
+            app:iconPadding="0dp" />
+
+        <Button
+            android:id="@+id/post_button"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:text="Create Post"
-            android:layout_gravity="center"/>
+            android:layout_alignParentRight="true"
+            android:text="POST"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <LinearLayout
         android:id="@+id/title_layout"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
         android:weightSum="5">
 
-        <TextView
+        <EditText
             android:id="@+id/title_text"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:text="Title"
-            android:layout_gravity="center"/>
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="textPersonName"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -56,14 +69,15 @@
         android:layout_width="match_parent"
         android:weightSum="5">
 
-
-        <TextView
-            android:id="@+id/mind_text"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/post_body_text"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:text="What's on your mind?"
-            android:layout_gravity="center"/>
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="What's on your mind?"
+            android:inputType="textMultiLine" />
 
     </LinearLayout>
 
