@@ -5,10 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -19,18 +17,19 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    val numberList : MutableList<String> = ArrayList()
+    val postCollection : MutableList<post_item> = ArrayList()
 
     var page = 1
     var isLoading = false
     val limit = 10
 
-    lateinit var adapter: NumAdapter
+    lateinit var adapter: RecyclerViewAdapter
     lateinit var layoutManager : LinearLayoutManager
+
 
     //bottom sheet
     private lateinit var bottomNav: BottomNavigationView
@@ -72,18 +71,20 @@ class MainActivity : AppCompatActivity() {
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
         }
 
+        // recycle view
 
+        getPage() // generates posts
         layoutManager = LinearLayoutManager(this)
-
-        findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
-        getPage()
-
-        findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        adapter = RecyclerViewAdapter(postCollection)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val visibleItemCount = layoutManager.childCount
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
                 val total = adapter.itemCount
+                Log.d("total_count", total.toString())
 
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
@@ -94,6 +95,7 @@ class MainActivity : AppCompatActivity() {
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
+
     }
 
 
@@ -114,13 +116,15 @@ class MainActivity : AppCompatActivity() {
             if (::adapter.isInitialized) {
                 adapter.notifyDataSetChanged()
             } else {
-                adapter = NumAdapter(this)
+                adapter = RecyclerViewAdapter(postCollection)
                 findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
             }
             isLoading = false
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.GONE
         }, 2000)
     }
+
+
 
     fun updatePost(i: String)
     {
@@ -129,7 +133,8 @@ class MainActivity : AppCompatActivity() {
             try {
                 var dummyJson = URL(url).readText()
                 val jsonObj = JSONObject(dummyJson)
-                numberList.add(jsonObj.get("title").toString() )
+                val item = post_item(R.drawable.profile_pic, "Item $i", jsonObj.get("title").toString(),"@person $i", "$i","$i", "$i")
+                postCollection.add(item)
             }
             catch (e: Exception)
             {
