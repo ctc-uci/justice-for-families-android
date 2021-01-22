@@ -1,5 +1,6 @@
 package com.example.justice4families
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -30,7 +31,8 @@ class SignupActivity : AppCompatActivity() {
         }
         else {
             if (validatePassword(password1)) {
-                Toast.makeText(this, "Good password", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
             else {
                 Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()

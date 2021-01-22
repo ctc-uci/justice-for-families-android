@@ -10,7 +10,12 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        login_button.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
         join_now.setOnClickListener {
+            //changed to view post activity for testing
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }

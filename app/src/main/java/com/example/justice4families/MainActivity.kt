@@ -2,6 +2,7 @@ package com.example.justice4families
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     var isLoading = false
     val limit = 10
 
-    lateinit var adapter: NumAdapter
+    lateinit var adapter : NumAdapter
     lateinit var layoutManager : LinearLayoutManager
 
     //bottom sheet
@@ -154,14 +155,18 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: NumViewHolder, position: Int) {
             holder.tvNum.text = activity.numberList[position]
+
+            holder.itemView.setOnClickListener{
+                val intent = Intent(activity, ViewPostActivity::class.java)
+                activity.startActivity(intent)
+            };
         }
 
         class NumViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val tvNum = v.findViewById<TextView>(R.id.tv_number)
+
         }
-
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
