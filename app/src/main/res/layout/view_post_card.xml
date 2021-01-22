@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/comment_card"
+        android:elevation="8dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        card_view:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/profileplaceholder"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.208" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/post_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[username]"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/join_button"
+            card_view:layout_constraintHorizontal_bias="0.168"
+            card_view:layout_constraintStart_toEndOf="@+id/profile_pic"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.278" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/post_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3h ago"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/join_button"
+            card_view:layout_constraintHorizontal_bias="0.27"
+            card_view:layout_constraintStart_toEndOf="@+id/post_username"
+            card_view:layout_constraintTop_toTopOf="@+id/post_username"
+            card_view:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:text="Join"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.226" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/joined_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:text="Joined!"
+            android:visibility="invisible"
+            card_view:backgroundTint="#FF5722"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.226" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/topic_headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingTop="16dp"
+            android:text="[Topic Headline]"
+            android:textSize="24sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/profile_pic"
+            card_view:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/post_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:text="place contents of post text here"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/topic_headline" />
+
+        <TextView
+            android:id="@+id/like_post"
+            android:layout_width="107dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="36dp"
+            android:gravity="center"
+            android:text="Like"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/post_content"
+            card_view:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/comment_post"
+            android:layout_width="107dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:text="Comment"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:gravity="center"
+            android:textSize="16sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/like_post"
+            card_view:layout_constraintTop_toBottomOf="@+id/post_content"
+            card_view:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/share_post"
+            android:layout_width="107dp"
+            android:layout_height="50dp"
+            android:text="Share"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.173"
+            card_view:layout_constraintStart_toEndOf="@+id/comment_post"
+            card_view:layout_constraintTop_toBottomOf="@+id/post_content"
+            card_view:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
