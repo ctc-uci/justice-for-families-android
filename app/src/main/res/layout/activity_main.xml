@@ -28,10 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <ProgressBar
-                android:id="@+id/progressbar"
-                android:layout_width="24dp"
-                android:layout_height="48dp" />
+
         </LinearLayout>
 
 
@@ -43,6 +40,13 @@
         android:layout_height="match_parent">
 
         <include layout="@layout/bottom_sheet" />
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:indeterminateTint="@color/purple_500"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -9,11 +9,10 @@ class PostViewModel : ViewModel(){
     private val items = mutableListOf(
             //place holders
             Post(
-                "Maria",
+                "Anonymous",
                 null,
                 "Computer Science",
                 "12/20",
-                "Test",
                 "This is a post"
             )
         ,

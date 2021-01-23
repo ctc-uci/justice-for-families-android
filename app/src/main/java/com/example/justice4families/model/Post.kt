@@ -7,6 +7,5 @@ data class Post (
     val imageUri: Uri?,
     val topicHeadline: String?,
     val timeStamp: String?,
-    val postTitle: String?,
     val postText: String?
 )
