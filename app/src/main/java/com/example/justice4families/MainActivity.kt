@@ -2,14 +2,13 @@ package com.example.justice4families
 
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -18,20 +17,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.json.JSONObject
-import java.lang.Exception
 import java.net.URL
-
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    val numberList : MutableList<String> = ArrayList()
+    val postCollection : MutableList<post_item> = ArrayList()
 
     var page = 1
     var isLoading = false
     val limit = 10
 
-    lateinit var adapter : NumAdapter
+    lateinit var postAdapter: RecyclerViewAdapter
     lateinit var layoutManager : LinearLayoutManager
+
 
     //bottom sheet
     private lateinit var bottomNav: BottomNavigationView
@@ -73,31 +72,54 @@ class MainActivity : AppCompatActivity() {
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
         }
 
-
-        layoutManager = LinearLayoutManager(this)
-
-        findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
+        // recycle view
         getPage()
+        layoutManager = LinearLayoutManager(this)
+        var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        postRecyclerView.layoutManager = layoutManager
+        postAdapter = RecyclerViewAdapter(postCollection,this)
+        postRecyclerView.adapter = postAdapter
+        postRecyclerView.layoutManager = layoutManager
+
 
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val visibleItemCount = layoutManager.childCount
-                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                val total = adapter.itemCount
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val visibleItemCount = layoutManager.childCount
+                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                if (!isLoading) {
-                    if ((visibleItemCount + pastVisibleItem) >= total) {
-                        page++
-                        getPage()
+                    val total = postAdapter.itemCount
+                    Log.d("total_count", total.toString())
+
+                    if (!isLoading) {
+                        if ((visibleItemCount + pastVisibleItem) >= total) {
+                            page++
+                            getPage()
+                        }
                     }
+                    super.onScrolled(recyclerView, dx, dy)
                 }
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })
+            })
+
+
+        
+        //dummy list for horizontal scroll
+        var items = ArrayList<String>()
+        for (i in 1..10) {
+            val a = "Missed Message "
+            val b = i
+            items.add(a + b)
+        }
+
+        //set up horizontal recycler view
+        val horizontalRecycleView = findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
+        val horizontalLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        horizontalRecycleView.setHasFixedSize(true)
+        horizontalRecycleView.setItemViewCacheSize(20)
+        horizontalRecycleView.layoutManager = horizontalLayoutManager
+        var adapter = UpdatesAdapter(items)
+        horizontalRecycleView.adapter = adapter
     }
-
-
 
     fun getPage() {
         isLoading = true
@@ -112,16 +134,17 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.VISIBLE
-            if (::adapter.isInitialized) {
-                adapter.notifyDataSetChanged()
+            if (::postAdapter.isInitialized) {
+                postAdapter.notifyDataSetChanged()
             } else {
-                adapter = NumAdapter(this)
-                findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
+                postAdapter = RecyclerViewAdapter(postCollection,this)
+                findViewById<RecyclerView>(R.id.recyclerView).adapter = postAdapter
             }
             isLoading = false
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.GONE
         }, 2000)
     }
+
 
     fun updatePost(i: String)
     {
@@ -130,7 +153,14 @@ class MainActivity : AppCompatActivity() {
             try {
                 var dummyJson = URL(url).readText()
                 val jsonObj = JSONObject(dummyJson)
-                numberList.add(jsonObj.get("title").toString() )
+                val item = post_item(Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
+                        "Item $i",
+                        jsonObj.get("title").toString(),
+                        "@person $i",
+                        "$i",
+                        "$i",
+                        "$i")
+                postCollection.add(item)
             }
             catch (e: Exception)
             {
