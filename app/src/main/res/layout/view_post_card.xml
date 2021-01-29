@@ -126,13 +126,13 @@
             android:layout_height="27dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="7dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             card_view:layout_constraintBottom_toBottomOf="@+id/like_post"
             card_view:layout_constraintEnd_toEndOf="@+id/like_post"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="@+id/like_post"
             card_view:layout_constraintTop_toTopOf="@+id/like_post"
-            card_view:layout_constraintVertical_bias="0.26"
+            card_view:layout_constraintVertical_bias="0.27"
             card_view:srcCompat="@drawable/like_icon_blue" />
 
         <ImageView
