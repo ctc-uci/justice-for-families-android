@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.justice4families.data.AuthenticationApi
+import com.example.justice4families.model.SignUpRequest
 import kotlinx.android.synthetic.main.activity_signup.*
 import kotlinx.android.synthetic.main.activity_signup.view.*
 import okhttp3.ResponseBody
@@ -12,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SignupActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -36,7 +37,7 @@ class SignupActivity : AppCompatActivity() {
         }
         else {
             if (validatePassword(password1)) {
-                AuthenticationApi().registerUser(email, password1)
+                AuthenticationApi().registerUser(SignUpRequest(email, password1))
                     .enqueue(object: Callback<ResponseBody> {
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                             println(t.message)
@@ -46,8 +47,13 @@ class SignupActivity : AppCompatActivity() {
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>
                         ) {
-                            val intent = Intent(applicationContext, MainActivity::class.java)
-                            startActivity(intent)
+                            if(response.code()==200) {
+                                val intent = Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent)
+                            }
+                            else{
+                                Toast.makeText(applicationContext, "Email or Password already exists", Toast.LENGTH_LONG).show()
+                            }
                         }
                     })
             }
