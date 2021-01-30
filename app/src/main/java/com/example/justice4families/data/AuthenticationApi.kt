@@ -1,33 +1,29 @@
 package com.example.justice4families.data
 
-
+import com.example.justice4families.model.LoginRequest
+import com.example.justice4families.model.SignUpRequest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthenticationApi {
 
-    @FormUrlEncoded
-    @POST("register")
+    @POST("authentication/register")
     fun registerUser(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body request: SignUpRequest
     ) : Call<ResponseBody>
 
-    @FormUrlEncoded
-    @POST("login")
+    @POST("authentication/login")
     fun loginUser(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body request: LoginRequest
     ) : Call<ResponseBody>
 
     companion object{
         operator fun invoke(): AuthenticationApi {
-            return Retrofit.Builder().baseUrl("http://10.0.2.2:3000/authentication/") //192.168.1.157 10.0.2.2
+            return Retrofit.Builder().baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(AuthenticationApi::class.java)
