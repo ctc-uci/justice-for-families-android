@@ -29,6 +29,9 @@ class SignUpActivity : AppCompatActivity() {
         if(email.isEmpty()){
             Toast.makeText(this, "Please Enter an Email Address", Toast.LENGTH_LONG).show()
         }
+        else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Please Enter a valid Email Address", Toast.LENGTH_LONG).show()
+        }
         else if(password1.isEmpty() or password2.isEmpty()) {
             Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
         }

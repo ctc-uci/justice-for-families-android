@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.justice4families.data.AuthenticationApi
+import com.example.justice4families.model.LoginRequest
 import kotlinx.android.synthetic.main.activity_login.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -42,12 +43,16 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
             return false
         }
+        else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Please Enter a valid Email Address", Toast.LENGTH_LONG).show()
+            return false
+        }
 
         return true
     }
 
     private fun loginRequest(email: String, password: String) {
-        AuthenticationApi().loginUser(email, password)
+        AuthenticationApi().loginUser(LoginRequest(email, password))
             .enqueue(object: Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG).show()
