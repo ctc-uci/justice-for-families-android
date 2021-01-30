@@ -4,8 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.justice4families.data.AuthenticationApi
 import kotlinx.android.synthetic.main.activity_signup.*
 import kotlinx.android.synthetic.main.activity_signup.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +36,20 @@ class SignupActivity : AppCompatActivity() {
         }
         else {
             if (validatePassword(password1)) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                AuthenticationApi().registerUser(email, password1)
+                    .enqueue(object: Callback<ResponseBody> {
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            println(t.message)
+                        }
+
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: Response<ResponseBody>
+                        ) {
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                    })
             }
             else {
                 Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()
