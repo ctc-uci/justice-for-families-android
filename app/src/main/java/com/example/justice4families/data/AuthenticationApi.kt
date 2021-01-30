@@ -18,9 +18,16 @@ interface AuthenticationApi {
         @Field("password") password: String
     ) : Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("login")
+    fun loginUser(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ) : Call<ResponseBody>
+
     companion object{
         operator fun invoke(): AuthenticationApi {
-            return Retrofit.Builder().baseUrl("https://10.0.2.2:3000/authentication/")
+            return Retrofit.Builder().baseUrl("http://10.0.2.2:3000/authentication/") //192.168.1.157 10.0.2.2
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(AuthenticationApi::class.java)
