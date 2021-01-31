@@ -57,15 +57,20 @@ class LoginActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG).show()
                     println(t.message)
-                    t.printStackTrace()
                 }
 
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    val intent = Intent(applicationContext, MainActivity::class.java)
-                    startActivity(intent)
+                    if(response.isSuccessful)
+                    {
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                    } else if(response.code() == 500) {
+                        Toast.makeText(applicationContext, "Error logging in", Toast.LENGTH_LONG).show()
+                    }
+
                 }
             })
     }
