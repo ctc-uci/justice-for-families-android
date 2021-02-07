@@ -90,10 +90,10 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private var likes = 0
 
     fun setPost(post: Post){
-        username.text = post.name
-        timeStamp.text = post.timeStamp
-        postContent.text = post.postText
-        topicHeadline.text = post.topicHeadline
+        username.text = post.username
+        timeStamp.text = post.datePosted
+        postContent.text = post.text
+        topicHeadline.text = post.title
         likeCount.text = likes.toString()
         like.setOnClickListener {
             likeClick = if(!likeClick){

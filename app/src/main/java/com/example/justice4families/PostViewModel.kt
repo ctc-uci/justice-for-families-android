@@ -11,9 +11,13 @@ class PostViewModel : ViewModel(){
             Post(
                 "Anonymous",
                 null,
-                "Computer Science",
+                listOf("Computer Science", "testing"),
                 "12/20",
-                "This is a post"
+                2,
+                false,
+                "This is a post",
+                "This is a post",
+                ""
             )
         ,
             Comment(
