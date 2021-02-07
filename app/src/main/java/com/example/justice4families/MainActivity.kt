@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.justice4families.model.Post
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.json.JSONObject
@@ -22,13 +23,13 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    val postCollection : MutableList<post_item> = ArrayList()
+    val postCollection : MutableList<Post> = ArrayList()
 
     var page = 1
     var isLoading = false
     val limit = 10
 
-    lateinit var postAdapter: RecyclerViewAdapter
+    lateinit var postAdapter: NumAdapter
     lateinit var layoutManager : LinearLayoutManager
 
 
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         postRecyclerView.layoutManager = layoutManager
-        postAdapter = RecyclerViewAdapter(postCollection,this)
+        postAdapter = NumAdapter(this)
         postRecyclerView.adapter = postAdapter
         postRecyclerView.layoutManager = layoutManager
 
@@ -137,7 +138,7 @@ class MainActivity : AppCompatActivity() {
             if (::postAdapter.isInitialized) {
                 postAdapter.notifyDataSetChanged()
             } else {
-                postAdapter = RecyclerViewAdapter(postCollection,this)
+                postAdapter = NumAdapter(this)
                 findViewById<RecyclerView>(R.id.recyclerView).adapter = postAdapter
             }
             isLoading = false
@@ -153,13 +154,11 @@ class MainActivity : AppCompatActivity() {
             try {
                 var dummyJson = URL(url).readText()
                 val jsonObj = JSONObject(dummyJson)
-                val item = post_item(Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
+                val item = Post("@person $i",
+                        Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
                         "Item $i",
-                        jsonObj.get("title").toString(),
-                        "@person $i",
-                        "$i",
-                        "$i",
-                        "$i")
+                        "10:00 am",
+                        jsonObj.get("title").toString())
                 postCollection.add(item)
             }
             catch (e: Exception)
