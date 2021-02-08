@@ -47,13 +47,12 @@
             android:id="@+id/post_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="3h ago"
-            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@+id/join_button"
-            card_view:layout_constraintHorizontal_bias="0.27"
-            card_view:layout_constraintStart_toEndOf="@+id/post_username"
-            card_view:layout_constraintTop_toTopOf="@+id/post_username"
-            card_view:layout_constraintVertical_bias="0.0" />
+            card_view:layout_constraintHorizontal_bias="0.233"
+            card_view:layout_constraintStart_toEndOf="@+id/profile_pic"
+            card_view:layout_constraintTop_toBottomOf="@+id/post_username" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/join_button"
@@ -168,11 +167,11 @@
             android:id="@+id/share_post"
             android:layout_width="107dp"
             android:layout_height="50dp"
-            android:text="Share"
-            android:textStyle="bold"
             android:gravity="center"
-            android:textSize="16sp"
+            android:text="Share"
             android:textColor="@color/gray"
+            android:textSize="16sp"
+            android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.173"

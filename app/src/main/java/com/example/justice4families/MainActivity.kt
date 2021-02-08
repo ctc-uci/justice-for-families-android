@@ -160,46 +160,28 @@ class MainActivity : AppCompatActivity() {
     {
         //var url = "https://jsonplaceholder.typicode.com/todos/" + i
 
-        //for now, try to get all the posts from the endpoint and display them, will work on refresh later
-        val thread = Thread {
-            try {
-//                var dummyJson = URL(url).readText()
-//                val jsonObj = JSONObject(dummyJson)
-//                val item = Post("@person $i",
-//                        Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
-//                        "Item $i",
-//                        "10:00 am",
-//                        jsonObj.get("title").toString())
-//                postCollection.add(item)
-                PostApi().getAllPosts()
-                    .enqueue(object: Callback<MutableList<Post>> {
-                        override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
-                            Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG).show()
-                            println(t.message)
-                        }
+        PostApi().getAllPosts()
+            .enqueue(object : Callback<MutableList<Post>> {
+                override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
+                    println(t.message)
+                }
 
-                        override fun onResponse(
-                            call: Call<MutableList<Post>>,
-                            response: Response<MutableList<Post>>
-                        ) {
-                            if(response.isSuccessful)
-                            {
-                                postCollection = response.body()!!
-                            } else if(response.code() == 400) {
-                                Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG).show()
-                            }
-
-                        }
+                override fun onResponse(
+                    call: Call<MutableList<Post>>,
+                    response: Response<MutableList<Post>>
+                ) {
+                    if (response.isSuccessful) {
+                        postCollection = response.body()!!
+                        postAdapter.notifyDataSetChanged()
+                    } else if (response.code() == 400) {
+                        Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG)
+                            .show()
                     }
+                }
+            })
 
-                    )
-            }
-            catch (e: Exception)
-            {
-                e.printStackTrace()
-            }
-        }
-        thread.start()
     }
 
 

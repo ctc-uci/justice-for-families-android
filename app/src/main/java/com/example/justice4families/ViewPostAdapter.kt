@@ -67,9 +67,9 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     val commentText: TextView = itemView.findViewById(R.id.post_content)
 
     fun setComments(comment: Comment){
-        name.text = comment.name
-        timeStamp.text = comment.timeStamp
-        commentText.text = comment.commentText
+        name.text = comment.username
+        timeStamp.text = comment.datePosted
+        commentText.text = comment.text
     }
 }
 

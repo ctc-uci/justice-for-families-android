@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Comment
+import com.example.justice4families.model.Post
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_view_post.*
@@ -42,7 +43,8 @@ class ViewPostActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(this)
 
-
+        val post : Post? = intent.getParcelableExtra("post")
+        viewModel.setPost(post!!)
         viewModel.postItems.observe(this, Observer {postItems ->
             postItems?.let{
                 adapter.setItems(postItems)
@@ -68,7 +70,7 @@ class ViewPostActivity : AppCompatActivity() {
                         comment_button.setOnClickListener {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                             //save comment associated with this post
-                            viewModel.addComment(Comment("Maria", getDateTime(), comment_text.text.toString()))
+                            viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.getUserName(),0, post._id, getDateTime()))
 
                         }
                     }

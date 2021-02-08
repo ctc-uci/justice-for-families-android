@@ -66,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     if(response.isSuccessful)
                     {
+                        savedPreferences.setUserName(email)
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                     } else if(response.code() == 500) {

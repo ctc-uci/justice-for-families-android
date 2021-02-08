@@ -26,6 +26,7 @@ class NumAdapter(val activity: MainActivity) : RecyclerView.Adapter<postViewHold
         holder.setPost(post)
         holder.itemView.setOnClickListener{
             val intent = Intent(activity, ViewPostActivity::class.java)
+            intent.putExtra("post", post)
             activity.startActivity(intent)
         }
     }
