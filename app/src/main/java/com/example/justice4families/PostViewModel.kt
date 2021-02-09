@@ -1,6 +1,8 @@
 package com.example.justice4families
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
@@ -15,12 +17,12 @@ class PostViewModel : ViewModel(){
     private val items = mutableListOf<Any>()
     private lateinit var post: Post
 
-    var postItems = MutableLiveData<List<Any>>(items)
+    private val _postItems:MutableLiveData<List<Any>> = MutableLiveData()
 
 
     fun addComment(comment: Comment){
         items.add(comment)
-        postItems.value = items
+        _postItems.value = items
         PostApi().postComment(post._id!!, comment)
             .enqueue(object : Callback<ResponseBody>{
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -49,20 +51,24 @@ class PostViewModel : ViewModel(){
                     response: Response<MutableList<Comment>>
                 ) {
                     if(response.isSuccessful){
-                        println("here")
-                        response.body()?.let { comments ->
-                            for(comment in comments){
+                        items.add(post)
+                        response.body()?.let { comments->
+                            for(comment in comments) {
+                                println(comment)
                                 items.add(comment)
                             }
                         }
+                        _postItems.value = items
                     }
                 }
             })
+
     }
 
     fun setPost(post: Post){
         this.post = post
-        items.add(post)
         fetchComments(post)
     }
+
+    fun getPost() =_postItems as LiveData<List<Any>>
 }
