@@ -1,0 +1,98 @@
+package com.example.justice4families.profile
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.justice4families.PostsAdapter
+import com.example.justice4families.R
+import com.example.justice4families.data.PostApi
+import com.example.justice4families.model.Post
+import com.example.justice4families.savedPreferences
+import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.activity_view_postv2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.ArrayList
+
+/**
+ * A placeholder fragment containing a simple view.
+ */
+class PostsFragment : Fragment() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: PostsAdapter
+    private lateinit var userName:TextView
+    var postCollection : MutableList<Post> = ArrayList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val root = inflater.inflate(R.layout.posts_user_profile, container, false)
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView= view.findViewById(R.id.post_recycler)
+        adapter = PostsAdapter(requireContext())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager= LinearLayoutManager(requireContext())
+
+
+        PostApi().getAllPosts()
+            .enqueue(object : Callback<MutableList<Post>> {
+                override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                    Toast.makeText(activity, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
+                    println(t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Post>>,
+                    response: Response<MutableList<Post>>
+                ) {
+                    if (response.isSuccessful) {
+                        postCollection = response.body()!!
+                        progressBar.visibility = View.GONE
+                        adapter.setPosts(postCollection)
+                    } else if (response.code() == 400) {
+                        Toast.makeText(activity, "Error finding posts", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    companion object {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private const val ARG_SECTION_NUMBER = "section_number"
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        @JvmStatic
+        fun newInstance(sectionNumber: Int): PostsFragment {
+            return PostsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                }
+            }
+        }
+    }
+}

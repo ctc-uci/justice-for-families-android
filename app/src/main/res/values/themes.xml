@@ -28,7 +28,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Justice4Families.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Justice4Families.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Theme.Justice4Families.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

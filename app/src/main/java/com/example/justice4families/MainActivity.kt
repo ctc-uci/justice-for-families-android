@@ -3,7 +3,6 @@ package com.example.justice4families
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 
@@ -17,14 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
+import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.net.URL
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     var isLoading = false
     val limit = 10
 
-    lateinit var postAdapter: NumAdapter
+    lateinit var postAdapter: PostsAdapter
     lateinit var layoutManager : LinearLayoutManager
 
 
@@ -83,13 +80,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         // recycle view
-        getPage()
         layoutManager = LinearLayoutManager(this)
         var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         postRecyclerView.layoutManager = layoutManager
-        postAdapter = NumAdapter(this)
+        postAdapter = PostsAdapter(this)
         postRecyclerView.adapter = postAdapter
         postRecyclerView.layoutManager = layoutManager
+        getPage()
+
 
 
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -149,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             if (::postAdapter.isInitialized) {
                 postAdapter.notifyDataSetChanged()
             } else {
-                postAdapter = NumAdapter(this)
+                postAdapter = PostsAdapter(this)
                 findViewById<RecyclerView>(R.id.recyclerView).adapter = postAdapter
             }
             isLoading = false
@@ -176,7 +174,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         postCollection = response.body()!!
-                        postAdapter.notifyDataSetChanged()
+                        postAdapter.setPosts(postCollection)
                     } else if (response.code() == 400) {
                         Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG)
                             .show()
