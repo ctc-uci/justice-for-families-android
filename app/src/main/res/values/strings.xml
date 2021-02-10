@@ -24,5 +24,8 @@
        \n \t <li> A lowercase character</li>
        \n \t <li> A number</li>
        \n \t <li> A special character (!@#$%^&amp;*)</li></string>
+    <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.justice4families
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -57,6 +58,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.ic_profile -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+                    val intent = Intent(this, UserProfileActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.ic_search -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
