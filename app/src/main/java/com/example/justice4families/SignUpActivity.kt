@@ -51,6 +51,7 @@ class SignUpActivity : AppCompatActivity() {
                             response: Response<ResponseBody>
                         ) {
                             if(response.code()==200) {
+                                savedPreferences.setUserName(email)
                                 val intent = Intent(applicationContext, MainActivity::class.java)
                                 startActivity(intent)
                             }

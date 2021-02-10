@@ -15,16 +15,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import okhttp3.ResponseBody
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.URL
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    val postCollection : MutableList<Post> = ArrayList()
+    var postCollection : MutableList<Post> = ArrayList()
 
     var page = 1
     var isLoading = false
@@ -42,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         //bottom sheet expansion
         bottom_sheet = findViewById(R.id.bottom_sheet);
@@ -126,15 +132,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getPage() {
-        isLoading = true
-        val start = (page - 1) * limit
-        val end = page * limit
+//        isLoading = true
+//        val start = (page - 1) * limit
+//        val end = page * limit
 
-        for (i in start..end) {
+//        for (i in start..end) {
+//
+//            //updatePost(i.toString())
+//
+//        }
 
-            updatePost(i.toString())
-
-        }
+        updatePost()
 
         Handler().postDelayed({
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.VISIBLE
@@ -150,26 +158,32 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun updatePost(i: String)
+    fun updatePost()
     {
-        var url = "https://jsonplaceholder.typicode.com/todos/" + i
-        val thread = Thread {
-            try {
-                var dummyJson = URL(url).readText()
-                val jsonObj = JSONObject(dummyJson)
-                val item = Post("@person $i",
-                        Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
-                        "Item $i",
-                        "10:00 am",
-                        jsonObj.get("title").toString())
-                postCollection.add(item)
-            }
-            catch (e: Exception)
-            {
-                e.printStackTrace()
-            }
-        }
-        thread.start()
+        //var url = "https://jsonplaceholder.typicode.com/todos/" + i
+
+        PostApi().getAllPosts()
+            .enqueue(object : Callback<MutableList<Post>> {
+                override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
+                    println(t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Post>>,
+                    response: Response<MutableList<Post>>
+                ) {
+                    if (response.isSuccessful) {
+                        postCollection = response.body()!!
+                        postAdapter.notifyDataSetChanged()
+                    } else if (response.code() == 400) {
+                        Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            })
+
     }
 
 

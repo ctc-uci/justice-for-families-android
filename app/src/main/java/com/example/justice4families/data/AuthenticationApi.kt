@@ -23,7 +23,7 @@ interface AuthenticationApi {
 
     companion object{
         operator fun invoke(): AuthenticationApi {
-            return Retrofit.Builder().baseUrl("http://10.0.2.2:3000/")
+            return Retrofit.Builder().baseUrl("https://j4f-backend.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(AuthenticationApi::class.java)
