@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,22 +12,17 @@ import com.example.justice4families.PostsAdapter
 import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
-import com.example.justice4families.savedPreferences
-import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.activity_view_postv2.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 class PostsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PostsAdapter
-    private lateinit var userName:TextView
     var postCollection : MutableList<Post> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +33,7 @@ class PostsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.posts_user_profile, container, false)
-        return root
+        return inflater.inflate(R.layout.posts_user_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
