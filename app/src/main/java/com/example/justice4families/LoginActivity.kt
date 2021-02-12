@@ -23,8 +23,6 @@ class LoginActivity : AppCompatActivity() {
             var password : String = password.pass_text.text.toString()
             if(validateLogin(email, password))  {
                 loginRequest(email, password)
-                savedPreferences.setUserName(email)
-
             }
         }
 

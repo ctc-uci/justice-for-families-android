@@ -12,6 +12,7 @@ import com.example.justice4families.PostsAdapter
 import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
+import com.example.justice4families.savedPreferences
 import kotlinx.android.synthetic.main.activity_view_postv2.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +24,7 @@ class PostsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PostsAdapter
+    private lateinit var userName: String
     var postCollection : MutableList<Post> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +44,9 @@ class PostsFragment : Fragment() {
         adapter = PostsAdapter(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(requireContext())
+        userName = (activity as UserProfileActivity).userName
 
-
-        PostApi().getAllPosts()
+        PostApi().getPostsByUsername(userName)
             .enqueue(object : Callback<MutableList<Post>> {
                 override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
                     Toast.makeText(activity, t.message.toString(), Toast.LENGTH_LONG)
