@@ -1,7 +1,9 @@
 package com.example.justice4families
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +11,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Comment
 import com.example.justice4families.model.Post
+import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import org.w3c.dom.Text
 
 class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -94,7 +99,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         timeStamp.text = post.datePosted
         postContent.text = post.text
         topicHeadline.text = post.title
+        likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
+
         like.setOnClickListener {
             likeClick = if(!likeClick){
                 like.setTextColor(context.resources.getColor(R.color.purple_500))
@@ -125,6 +132,12 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         joined.setOnClickListener {
             joined.visibility = View.INVISIBLE
             join.visibility = View.VISIBLE
+        }
+
+        profileImage.setOnClickListener{
+            val intent = Intent(context, UserProfileActivity::class.java)
+            intent.putExtra("post_username", post.username)
+            context.startActivity(intent)
         }
 
     }

@@ -1,6 +1,8 @@
 package com.example.justice4families.profile
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -25,6 +27,17 @@ class UserProfileActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         user_name.text = savedPreferences.getUserName()
+        var loggedInUser = true
+        val editProfileBtn :Button = findViewById(R.id.edit_profile_btn)
+
+        if(intent.hasExtra("post_username")){
+            user_name.text = intent.getStringExtra("post_username").toString()
+            loggedInUser = false
+        }
+
+        if(!loggedInUser){
+            editProfileBtn.visibility = View.GONE
+        }
 
     }
 }

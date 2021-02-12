@@ -58,7 +58,7 @@
                     android:layout_marginBottom="8dp"
                     android:text="Los Angeles, CA"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/button2"
+                    app:layout_constraintBottom_toTopOf="@+id/edit_profile_btn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.483"
                     app:layout_constraintStart_toEndOf="@+id/profile_pic"
@@ -66,7 +66,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/edit_profile_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit Profile"
