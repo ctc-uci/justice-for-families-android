@@ -1,15 +1,13 @@
 package com.example.justice4families.data
 
+import com.example.justice4families.PostInfo
 import com.example.justice4families.model.Post
 import com.example.justice4families.model.Comment
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.Path
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface PostApi {
     @GET("posts/username/{username}")
@@ -26,6 +24,10 @@ interface PostApi {
 
     @POST("comments/{postId}/comments/create")
     fun postComment(@Path("postId") postId:String, @Body comment: Comment): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("posts/create")
+    fun addPost(@Body postData: PostInfo): Call<ResponseBody>
 
     companion object{
         operator fun invoke(): PostApi {

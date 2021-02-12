@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
             else{
                 var tags: List<String> = listOf("x", "y", "z")
-                sendPost("@rando",subject.text.toString(),content.text.toString(),tags,false)
+                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,false)
                 subject.text = ""
                 content.text = ""
             }
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
     {
         Log.d("api_call", "SENT")
         val apiService =  FeedPostApi()
-        FeedPostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
+        PostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
             .enqueue(object: Callback<ResponseBody> {
 
 
