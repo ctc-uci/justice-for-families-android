@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -17,9 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Post
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import okhttp3.ResponseBody
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.URL
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -70,7 +74,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.post_button).setOnClickListener {
+            Log.d("api_call", "post button clicked")
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+            var subject: TextView = findViewById(R.id.title_text)
+            var content: TextView = findViewById(R.id.post_body_text)
+
+            if(subject.text.isEmpty() || content.text.isEmpty())
+                Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
+            else{
+                var tags: List<String> = listOf("x", "y", "z")
+                sendPost("@rando",subject.text.toString(),content.text.toString(),tags,false)
+                subject.text = ""
+                content.text = ""
+            }
+
+
         }
 
         // recycle view
@@ -83,24 +101,25 @@ class MainActivity : AppCompatActivity() {
         postRecyclerView.layoutManager = layoutManager
 
 
-        findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
 
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val visibleItemCount = layoutManager.childCount
-                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = layoutManager.childCount
+                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                    val total = postAdapter.itemCount
-                    Log.d("total_count", total.toString())
+                val total = postAdapter.itemCount
+                Log.d("total_count", total.toString())
 
-                    if (!isLoading) {
-                        if ((visibleItemCount + pastVisibleItem) >= total) {
-                            page++
-                            getPage()
-                        }
+                if (!isLoading) {
+                    if ((visibleItemCount + pastVisibleItem) >= total) {
+                        page++
+                        getPage()
                     }
-                    super.onScrolled(recyclerView, dx, dy)
                 }
-            })
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
 
 
         
@@ -114,12 +133,48 @@ class MainActivity : AppCompatActivity() {
 
         //set up horizontal recycler view
         val horizontalRecycleView = findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
-        val horizontalLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        val horizontalLayoutManager = LinearLayoutManager(
+            this@MainActivity,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         horizontalRecycleView.setHasFixedSize(true)
         horizontalRecycleView.setItemViewCacheSize(20)
         horizontalRecycleView.layoutManager = horizontalLayoutManager
         var adapter = UpdatesAdapter(items)
         horizontalRecycleView.adapter = adapter
+    }
+    fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
+    {
+        Log.d("api_call", "SENT")
+        val apiService =  FeedPostApi()
+        FeedPostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
+            .enqueue(object: Callback<ResponseBody> {
+
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.d("api_call",t.message.toString())
+                    Log.d("api_call","NOOO")
+                }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    Log.d("api_call","success")
+                    Log.d("api_call",  response.raw().toString())
+                    Log.d("api_call",  response.body().toString())
+                    print(response.body())
+                    if(response.code().toString() == "200")
+                        Toast.makeText(applicationContext,"Post Added",Toast.LENGTH_LONG).show()
+                    else
+                        Toast.makeText(applicationContext,"Post Failed",Toast.LENGTH_LONG).show()
+                    Log.d("api_call",response.toString())
+                    Log.d("api_call",response.code().toString())
+
+
+                }
+            })
     }
 
     fun getPage() {
@@ -154,11 +209,13 @@ class MainActivity : AppCompatActivity() {
             try {
                 var dummyJson = URL(url).readText()
                 val jsonObj = JSONObject(dummyJson)
-                val item = Post("@person $i",
-                        Uri.parse( "android.resource://com.example.justice4families/" + R.drawable.profile_pic),
-                        "Item $i",
-                        "10:00 am",
-                        jsonObj.get("title").toString())
+                val item = Post(
+                    "@person $i",
+                    Uri.parse("android.resource://com.example.justice4families/" + R.drawable.profile_pic),
+                    "Item $i",
+                    "10:00 am",
+                    jsonObj.get("title").toString()
+                )
                 postCollection.add(item)
             }
             catch (e: Exception)
@@ -168,6 +225,7 @@ class MainActivity : AppCompatActivity() {
         }
         thread.start()
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
