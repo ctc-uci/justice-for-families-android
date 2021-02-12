@@ -201,7 +201,6 @@ class MainActivity : AppCompatActivity() {
 
     fun updatePost()
     {
-        //var url = "https://jsonplaceholder.typicode.com/todos/" + i
 
         PostApi().getAllPosts()
             .enqueue(object : Callback<MutableList<Post>> {

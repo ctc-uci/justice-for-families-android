@@ -24,7 +24,6 @@ interface PostApi {
     @POST("comments/{postId}/comments/create")
     fun postComment(@Path("postId") postId:String, @Body comment: Comment): Call<ResponseBody>
 
-    //@Headers("Content-Type: application/json")
     @POST("posts/create")
     fun addPost(@Body postData: Post): Call<ResponseBody>
 
