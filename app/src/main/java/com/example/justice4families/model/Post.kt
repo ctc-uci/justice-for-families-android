@@ -10,6 +10,7 @@ data class Post (
     val tags: List<String>?,
     val datePosted: String?,
     val numComments: Int?,
+    val numLikes: Int?,
     val anonymous: Boolean?,
     val title: String?,
     val text: String?,

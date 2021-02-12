@@ -1,6 +1,5 @@
 package com.example.justice4families.data
 
-import com.example.justice4families.PostInfo
 import com.example.justice4families.model.Post
 import com.example.justice4families.model.Comment
 import okhttp3.ResponseBody
@@ -25,9 +24,9 @@ interface PostApi {
     @POST("comments/{postId}/comments/create")
     fun postComment(@Path("postId") postId:String, @Body comment: Comment): Call<ResponseBody>
 
-    @Headers("Content-Type: application/json")
+    //@Headers("Content-Type: application/json")
     @POST("posts/create")
-    fun addPost(@Body postData: PostInfo): Call<ResponseBody>
+    fun addPost(@Body postData: Post): Call<ResponseBody>
 
     companion object{
         operator fun invoke(): PostApi {

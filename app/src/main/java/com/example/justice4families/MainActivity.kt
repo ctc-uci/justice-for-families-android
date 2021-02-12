@@ -143,8 +143,7 @@ class MainActivity : AppCompatActivity() {
     fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
-        val apiService =  FeedPostApi()
-        PostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
+        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
             .enqueue(object: Callback<ResponseBody> {
 
 
