@@ -37,8 +37,6 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/join_button"
-            card_view:layout_constraintHorizontal_bias="0.168"
             card_view:layout_constraintStart_toEndOf="@+id/profile_pic"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_bias="0.278" />
@@ -49,35 +47,11 @@
             android:layout_height="wrap_content"
             android:text="3h ago"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/join_button"
-            card_view:layout_constraintHorizontal_bias="0.27"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.127"
             card_view:layout_constraintStart_toEndOf="@+id/post_username"
             card_view:layout_constraintTop_toTopOf="@+id/post_username"
             card_view:layout_constraintVertical_bias="0.0" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/join_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="28dp"
-            android:text="Join"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_bias="0.226" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/joined_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="28dp"
-            android:text="Joined!"
-            android:visibility="invisible"
-            card_view:backgroundTint="#FF5722"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_bias="0.226" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/topic_headline"
