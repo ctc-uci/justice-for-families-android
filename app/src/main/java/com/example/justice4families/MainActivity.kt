@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -48,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         //bottom sheet expansion
         bottom_sheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -77,7 +75,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.post_button).setOnClickListener {
+            Log.d("api_call", "post button clicked")
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+            var subject: TextView = findViewById(R.id.title_text)
+            var content: TextView = findViewById(R.id.post_body_text)
+
+            if(subject.text.isEmpty() || content.text.isEmpty())
+                Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
+            else{
+                var tags: List<String> = listOf("x", "y", "z")
+                sendPost("@rando",subject.text.toString(),content.text.toString(),tags,false)
+                subject.text = ""
+                content.text = ""
+            }
+
+
         }
 
         // recycle view
@@ -127,6 +139,38 @@ class MainActivity : AppCompatActivity() {
         horizontalRecycleView.layoutManager = horizontalLayoutManager
         var adapter = UpdatesAdapter(items)
         horizontalRecycleView.adapter = adapter
+    }
+    fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
+    {
+        Log.d("api_call", "SENT")
+        val apiService =  FeedPostApi()
+        FeedPostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
+            .enqueue(object: Callback<ResponseBody> {
+
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.d("api_call",t.message.toString())
+                    Log.d("api_call","NOOO")
+                }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    Log.d("api_call","success")
+                    Log.d("api_call",  response.raw().toString())
+                    Log.d("api_call",  response.body().toString())
+                    print(response.body())
+                    if(response.code().toString() == "200")
+                        Toast.makeText(applicationContext,"Post Added",Toast.LENGTH_LONG).show()
+                    else
+                        Toast.makeText(applicationContext,"Post Failed",Toast.LENGTH_LONG).show()
+                    Log.d("api_call",response.toString())
+                    Log.d("api_call",response.code().toString())
+
+
+                }
+            })
     }
 
     fun getPage() {

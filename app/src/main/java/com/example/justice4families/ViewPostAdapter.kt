@@ -81,8 +81,6 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private val topicHeadline: TextView = itemView.findViewById(R.id.topic_headline)
     private val like:TextView = itemView.findViewById(R.id.like_post)
     private val comment:TextView = itemView.findViewById(R.id.comment_post)
-    private val join: Button = itemView.findViewById(R.id.join_button)
-    private val joined: Button = itemView.findViewById(R.id.joined_button)
     private val blueThumb: ImageView = itemView.findViewById(R.id.blue_thumb)
     private val grayThumb: ImageView = itemView.findViewById(R.id.gray_thumb)
     private val likeCount: TextView = itemView.findViewById(R.id.like_num)
@@ -116,16 +114,5 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         comment.setOnClickListener {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
-
-        join.setOnClickListener {
-            join.visibility = View.INVISIBLE
-            joined.visibility = View.VISIBLE
-        }
-
-        joined.setOnClickListener {
-            joined.visibility = View.INVISIBLE
-            join.visibility = View.VISIBLE
-        }
-
     }
 }
