@@ -173,16 +173,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getPage() {
-//        isLoading = true
-//        val start = (page - 1) * limit
-//        val end = page * limit
-
-//        for (i in start..end) {
-//
-//            //updatePost(i.toString())
-//
-//        }
-
         updatePost()
 
         Handler().postDelayed({
