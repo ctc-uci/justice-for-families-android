@@ -1,7 +1,10 @@
 package com.example.justice4families.model
 
 data class Comment (
-    val name: String?,
-    val timeStamp: String?,
-    val commentText: String?
+    val _id: String?,
+    val text: String?,
+    val username: String?,
+    val numLikes: Int?,
+    val postId: String?,
+    val datePosted: String?
 )

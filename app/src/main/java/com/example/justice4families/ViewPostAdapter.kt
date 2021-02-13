@@ -67,9 +67,9 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     val commentText: TextView = itemView.findViewById(R.id.post_content)
 
     fun setComments(comment: Comment){
-        name.text = comment.name
-        timeStamp.text = comment.timeStamp
-        commentText.text = comment.commentText
+        name.text = comment.username
+        timeStamp.text = comment.datePosted
+        commentText.text = comment.text
     }
 }
 
@@ -88,10 +88,10 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private var likes = 0
 
     fun setPost(post: Post){
-        username.text = post.name
-        timeStamp.text = post.timeStamp
-        postContent.text = post.postText
-        topicHeadline.text = post.topicHeadline
+        username.text = post.username
+        timeStamp.text = post.datePosted
+        postContent.text = post.text
+        topicHeadline.text = post.title
         likeCount.text = likes.toString()
         like.setOnClickListener {
             likeClick = if(!likeClick){

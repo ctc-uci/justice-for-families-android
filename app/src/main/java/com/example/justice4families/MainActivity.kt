@@ -2,6 +2,7 @@ package com.example.justice4families
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -24,10 +26,9 @@ import retrofit2.Response
 import java.net.URL
 import java.util.*
 
-
 class MainActivity : AppCompatActivity() {
 
-    val postCollection : MutableList<Post> = ArrayList()
+    var postCollection : MutableList<Post> = ArrayList()
 
     var page = 1
     var isLoading = false
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
             else{
                 var tags: List<String> = listOf("x", "y", "z")
-                sendPost("@rando",subject.text.toString(),content.text.toString(),tags,false)
+                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,false)
                 subject.text = ""
                 content.text = ""
             }
@@ -101,25 +102,24 @@ class MainActivity : AppCompatActivity() {
         postRecyclerView.layoutManager = layoutManager
 
 
-        findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+        findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val visibleItemCount = layoutManager.childCount
-                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val visibleItemCount = layoutManager.childCount
+                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                val total = postAdapter.itemCount
-                Log.d("total_count", total.toString())
+                    val total = postAdapter.itemCount
+                    Log.d("total_count", total.toString())
 
-                if (!isLoading) {
-                    if ((visibleItemCount + pastVisibleItem) >= total) {
-                        page++
-                        getPage()
+                    if (!isLoading) {
+                        if ((visibleItemCount + pastVisibleItem) >= total) {
+                            page++
+                            getPage()
+                        }
                     }
+                    super.onScrolled(recyclerView, dx, dy)
                 }
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })
+            })
 
 
         
@@ -133,11 +133,7 @@ class MainActivity : AppCompatActivity() {
 
         //set up horizontal recycler view
         val horizontalRecycleView = findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
-        val horizontalLayoutManager = LinearLayoutManager(
-            this@MainActivity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+        val horizontalLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
         horizontalRecycleView.setHasFixedSize(true)
         horizontalRecycleView.setItemViewCacheSize(20)
         horizontalRecycleView.layoutManager = horizontalLayoutManager
@@ -147,8 +143,7 @@ class MainActivity : AppCompatActivity() {
     fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
-        val apiService =  FeedPostApi()
-        FeedPostApi().addPost(PostInfo(username, subject,content,tags,anon,5))
+        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
             .enqueue(object: Callback<ResponseBody> {
 
 
@@ -178,15 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getPage() {
-        isLoading = true
-        val start = (page - 1) * limit
-        val end = page * limit
-
-        for (i in start..end) {
-
-            updatePost(i.toString())
-
-        }
+        updatePost()
 
         Handler().postDelayed({
             findViewById<ProgressBar>(R.id.progressbar).visibility = View.VISIBLE
@@ -202,30 +189,32 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun updatePost(i: String)
+    fun updatePost()
     {
-        var url = "https://jsonplaceholder.typicode.com/todos/" + i
-        val thread = Thread {
-            try {
-                var dummyJson = URL(url).readText()
-                val jsonObj = JSONObject(dummyJson)
-                val item = Post(
-                    "@person $i",
-                    Uri.parse("android.resource://com.example.justice4families/" + R.drawable.profile_pic),
-                    "Item $i",
-                    "10:00 am",
-                    jsonObj.get("title").toString()
-                )
-                postCollection.add(item)
-            }
-            catch (e: Exception)
-            {
-                e.printStackTrace()
-            }
-        }
-        thread.start()
-    }
 
+        PostApi().getAllPosts()
+            .enqueue(object : Callback<MutableList<Post>> {
+                override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
+                    println(t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Post>>,
+                    response: Response<MutableList<Post>>
+                ) {
+                    if (response.isSuccessful) {
+                        postCollection = response.body()!!
+                        postAdapter.notifyDataSetChanged()
+                    } else if (response.code() == 400) {
+                        Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            })
+
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

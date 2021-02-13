@@ -1,11 +1,18 @@
 package com.example.justice4families.model
 
-import android.net.Uri
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Post (
-    val name: String?,
-    val imageUri: Uri?,
-    val topicHeadline: String?,
-    val timeStamp: String?,
-    val postText: String?
-)
+    val _id: String?,
+    val username: String?,
+    val tags: List<String>?,
+    val datePosted: String?,
+    val numComments: Int?,
+    val numLikes: Int?,
+    val anonymous: Boolean?,
+    val title: String?,
+    val text: String?,
+    val media: String?
+): Parcelable
