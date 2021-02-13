@@ -131,10 +131,12 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             join.visibility = View.VISIBLE
         }
 
-        profileImage.setOnClickListener{
-            val intent = Intent(context, UserProfileActivity::class.java)
-            intent.putExtra("post_username", post.username)
-            context.startActivity(intent)
+        if(context !is UserProfileActivity){
+            profileImage.setOnClickListener{
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("post_username", post.username)
+                context.startActivity(intent)
+            }
         }
 
     }
