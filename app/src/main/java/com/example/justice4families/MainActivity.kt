@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         //bottom sheet expansion
         bottom_sheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -76,7 +74,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.post_button).setOnClickListener {
+            Log.d("api_call", "post button clicked")
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+            var subject: TextView = findViewById(R.id.title_text)
+            var content: TextView = findViewById(R.id.post_body_text)
+
+            if(subject.text.isEmpty() || content.text.isEmpty())
+                Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
+            else{
+                var tags: List<String> = listOf("x", "y", "z")
+                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,false)
+                subject.text = ""
+                content.text = ""
+            }
+
+
         }
 
         // recycle view
@@ -128,18 +140,39 @@ class MainActivity : AppCompatActivity() {
         var adapter = UpdatesAdapter(items)
         horizontalRecycleView.adapter = adapter
     }
+    fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
+    {
+        Log.d("api_call", "SENT")
+        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
+            .enqueue(object: Callback<ResponseBody> {
+
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.d("api_call",t.message.toString())
+                    Log.d("api_call","NOOO")
+                }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    Log.d("api_call","success")
+                    Log.d("api_call",  response.raw().toString())
+                    Log.d("api_call",  response.body().toString())
+                    print(response.body())
+                    if(response.code().toString() == "200")
+                        Toast.makeText(applicationContext,"Post Added",Toast.LENGTH_LONG).show()
+                    else
+                        Toast.makeText(applicationContext,"Post Failed",Toast.LENGTH_LONG).show()
+                    Log.d("api_call",response.toString())
+                    Log.d("api_call",response.code().toString())
+
+
+                }
+            })
+    }
 
     fun getPage() {
-//        isLoading = true
-//        val start = (page - 1) * limit
-//        val end = page * limit
-
-//        for (i in start..end) {
-//
-//            //updatePost(i.toString())
-//
-//        }
-
         updatePost()
 
         Handler().postDelayed({
@@ -158,7 +191,6 @@ class MainActivity : AppCompatActivity() {
 
     fun updatePost()
     {
-        //var url = "https://jsonplaceholder.typicode.com/todos/" + i
 
         PostApi().getAllPosts()
             .enqueue(object : Callback<MutableList<Post>> {
