@@ -26,6 +26,6 @@
        \n \t <li> A special character (!@#$%^&amp;*)</li></string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
     <string name="tab_text_1">Posts</string>
-    <string name="tab_text_2">Activity</string>
+    <string name="tab_text_2">Likes</string>
 
 </resources>

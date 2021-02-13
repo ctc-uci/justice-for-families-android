@@ -25,7 +25,6 @@ class LoginActivity : AppCompatActivity() {
                 loginRequest(email, password)
             }
         }
-
         join_now.setOnClickListener {
             //changed to view post activity for testing
             val intent = Intent(this, SignUpActivity::class.java)
