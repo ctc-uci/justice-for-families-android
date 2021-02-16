@@ -3,7 +3,6 @@ package com.example.justice4families
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
@@ -11,9 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Comment
+import com.example.justice4families.model.Post
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_view_post.*
+import kotlinx.android.synthetic.main.activity_view_post.back_to_mainfeed
+import kotlinx.android.synthetic.main.activity_view_post.toolbar
+import kotlinx.android.synthetic.main.activity_view_postv2.*
 import kotlinx.android.synthetic.main.add_comment_bottomsheet.*
 
 
@@ -42,9 +45,11 @@ class ViewPostActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(this)
 
-
-        viewModel.postItems.observe(this, Observer {postItems ->
+        val post : Post? = intent.getParcelableExtra("post")
+        viewModel.setPost(post!!)
+        viewModel.getPost().observe(this, Observer { postItems ->
             postItems?.let{
+                progressBar.visibility = View.GONE
                 adapter.setItems(postItems)
             }
           }
@@ -68,7 +73,7 @@ class ViewPostActivity : AppCompatActivity() {
                         comment_button.setOnClickListener {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                             //save comment associated with this post
-                            viewModel.addComment(Comment("Maria", getDateTime(), comment_text.text.toString()))
+                            viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.getUserName(),0, post._id, getDateTime()))
 
                         }
                     }
