@@ -18,6 +18,7 @@ import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
