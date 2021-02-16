@@ -1,6 +1,7 @@
 package com.example.justice4families
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Comment
 import com.example.justice4families.model.Post
+import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
-import org.w3c.dom.Text
+
 
 class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
@@ -81,6 +83,8 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private val topicHeadline: TextView = itemView.findViewById(R.id.topic_headline)
     private val like:TextView = itemView.findViewById(R.id.like_post)
     private val comment:TextView = itemView.findViewById(R.id.comment_post)
+    private val join: Button = itemView.findViewById(R.id.join_button)
+    private val joined: Button = itemView.findViewById(R.id.joined_button)
     private val blueThumb: ImageView = itemView.findViewById(R.id.blue_thumb)
     private val grayThumb: ImageView = itemView.findViewById(R.id.gray_thumb)
     private val likeCount: TextView = itemView.findViewById(R.id.like_num)
@@ -92,7 +96,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         timeStamp.text = post.datePosted
         postContent.text = post.text
         topicHeadline.text = post.title
+        likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
+
         like.setOnClickListener {
             likeClick = if(!likeClick){
                 like.setTextColor(context.resources.getColor(R.color.purple_500))
@@ -114,5 +120,24 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         comment.setOnClickListener {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
+
+        join.setOnClickListener {
+            join.visibility = View.INVISIBLE
+            joined.visibility = View.VISIBLE
+        }
+
+        joined.setOnClickListener {
+            joined.visibility = View.INVISIBLE
+            join.visibility = View.VISIBLE
+        }
+
+        if(context !is UserProfileActivity){
+            profileImage.setOnClickListener{
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("post_username", post.username)
+                context.startActivity(intent)
+            }
+        }
+
     }
 }
