@@ -23,10 +23,8 @@ class LoginActivity : AppCompatActivity() {
             var password : String = password.pass_text.text.toString()
             if(validateLogin(email, password))  {
                 loginRequest(email, password)
-
             }
         }
-
         join_now.setOnClickListener {
             //changed to view post activity for testing
             val intent = Intent(this, SignUpActivity::class.java)
