@@ -12,9 +12,14 @@ import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.justice4families.R
+import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.savedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.password
+import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.android.synthetic.main.activity_signup.view.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.activity_view_post.*
 
@@ -59,6 +64,12 @@ class UserProfileActivity : AppCompatActivity() {
 
         editProfileBtn.setOnClickListener{
             val intent = Intent(this, EditProfile::class.java)
+            val user = savedPreferences.getUserName()
+            intent.putExtra("email", user)
+
+            //dummy data
+            intent.putExtra("password", "Hello123!")
+
             startActivity(intent)
         }
 
