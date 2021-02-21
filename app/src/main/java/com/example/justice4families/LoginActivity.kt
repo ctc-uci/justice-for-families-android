@@ -1,9 +1,12 @@
 package com.example.justice4families
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import android.text.*
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.model.LoginRequest
@@ -15,16 +18,30 @@ import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
+    var isPasswordVisible:Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         login_button.setOnClickListener {
-            var email : String = email.email_text.text.toString()
-            var password : String = password.pass_text.text.toString()
+            var email : String = email.text.toString()
+            var password : String = password.password_text.text.toString()
             if(validateLogin(email, password))  {
                 loginRequest(email, password)
             }
         }
+
+        hide_password.setOnClickListener {
+            if(!isPasswordVisible){
+                password_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                isPasswordVisible = true
+            } else{
+                password_text.transformationMethod = PasswordTransformationMethod.getInstance()
+                isPasswordVisible = false
+            }
+        }
+
         join_now.setOnClickListener {
             //changed to view post activity for testing
             val intent = Intent(this, SignUpActivity::class.java)

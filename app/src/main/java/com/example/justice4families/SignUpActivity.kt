@@ -3,17 +3,25 @@ package com.example.justice4families
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.Toast
 import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.model.SignUpRequest
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.android.synthetic.main.activity_signup.hide_password
+import kotlinx.android.synthetic.main.activity_signup.password
 import kotlinx.android.synthetic.main.activity_signup.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SignUpActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity() {
+    var isPasswordVisible:Boolean = false
+    var isPasswordConfirmVisible:Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -21,7 +29,25 @@ class SignUpActivity : AppCompatActivity() {
             onBackPressed()
         }
         signup_button.setOnClickListener {
-            checkInfo(email_signup.email_signup_text.text.toString(), password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
+            checkInfo(email_signup.text.toString(), password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
+        }
+        hide_password.setOnClickListener{
+            if(!isPasswordVisible){
+                pass_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                isPasswordVisible = true
+            } else{
+                pass_text.transformationMethod = PasswordTransformationMethod.getInstance()
+                isPasswordVisible = false
+            }
+        }
+        hide_password_confirm.setOnClickListener{
+            if(!isPasswordConfirmVisible){
+                confirm_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                isPasswordConfirmVisible = true
+            } else{
+                confirm_text.transformationMethod = PasswordTransformationMethod.getInstance()
+                isPasswordConfirmVisible = false
+            }
         }
     }
 
