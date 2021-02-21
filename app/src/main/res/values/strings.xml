@@ -30,6 +30,6 @@
     <string name="tab_text_1">Posts</string>
     <string name="tab_text_2">Likes</string>
 
-    <string name="create_account">Create an account,\nSign up to get started!</string>
+    <string name="create_account"><b>Create an account</b>,\nSign up to get started!</string>
 
 </resources>
