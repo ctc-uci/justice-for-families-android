@@ -57,6 +57,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
+    <TextView
+        android:id="@+id/error_message_signup"
+        android:layout_width="309dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:textAppearance="@style/error_message_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
     <FrameLayout
         android:id="@+id/password"
         android:layout_width="277dp"
@@ -87,14 +100,14 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/button_eye" />
+            android:background="@drawable/password_hide_show" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/confirm_pass"
         android:layout_width="277dp"
         android:layout_height="44dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,10 +121,10 @@
             android:fontFamily="@font/poppins"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:textColorHint="#19769D"
-            android:singleLine="true"
             android:paddingLeft="20dip"
-            android:paddingRight="20dip"/>
+            android:paddingRight="20dip"
+            android:singleLine="true"
+            android:textColorHint="#19769D" />
 
         <ImageButton
             android:id="@+id/hide_password_confirm"
@@ -120,7 +133,7 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/button_eye" />
+            android:background="@drawable/password_hide_show" />
     </FrameLayout>
 
 
@@ -144,7 +157,7 @@
         android:layout_height="55dp"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/button_rectangle"
         android:fontFamily="@font/poppins"
@@ -183,7 +196,7 @@
         app:layout_constraintBottom_toTopOf="@+id/confirm_pass"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/error_message_signup"
         app:layout_constraintVertical_bias="0.0" />
 
 

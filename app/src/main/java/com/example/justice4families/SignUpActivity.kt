@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SignupActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     var isPasswordVisible:Boolean = false
     var isPasswordConfirmVisible:Boolean = false
 
@@ -35,18 +35,22 @@ class SignupActivity : AppCompatActivity() {
             if(!isPasswordVisible){
                 pass_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 isPasswordVisible = true
+                hide_password.isActivated = true
             } else{
                 pass_text.transformationMethod = PasswordTransformationMethod.getInstance()
                 isPasswordVisible = false
+                hide_password.isActivated = false
             }
         }
         hide_password_confirm.setOnClickListener{
             if(!isPasswordConfirmVisible){
                 confirm_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 isPasswordConfirmVisible = true
+                hide_password_confirm.isActivated = true
             } else{
                 confirm_text.transformationMethod = PasswordTransformationMethod.getInstance()
                 isPasswordConfirmVisible = false
+                hide_password_confirm.isActivated = false
             }
         }
     }
@@ -54,15 +58,19 @@ class SignupActivity : AppCompatActivity() {
     private fun checkInfo(email:String, password1:String, password2:String){
         if(email.isEmpty()){
             Toast.makeText(this, "Please Enter an Email Address", Toast.LENGTH_LONG).show()
+            error_message_signup.text = "Please enter an email address!"
         }
         else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Please Enter a valid Email Address", Toast.LENGTH_LONG).show()
+            error_message_signup.text = "Please enter a valid email address!"
         }
         else if(password1.isEmpty() or password2.isEmpty()) {
             Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
+            error_message_signup.text = "Please enter a password!"
         }
         else if (password1 != password2) {
             Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show()
+            error_message_signup.text = "Your passwords don't match. Please try again!"
         }
         else {
             if (validatePassword(password1)) {
@@ -89,6 +97,7 @@ class SignupActivity : AppCompatActivity() {
             }
             else {
                 Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()
+                error_message_signup.text = "Your password doesn't meet the criteria below!"
             }
         }
     }
