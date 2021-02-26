@@ -1,7 +1,6 @@
 package com.example.justice4families
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,9 +13,6 @@ import com.example.justice4families.model.Post
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_view_post.*
-import kotlinx.android.synthetic.main.activity_view_post.back_to_mainfeed
-import kotlinx.android.synthetic.main.activity_view_post.toolbar
-import kotlinx.android.synthetic.main.activity_view_postv2.*
 import kotlinx.android.synthetic.main.add_comment_bottomsheet.*
 
 
@@ -28,15 +24,14 @@ class ViewPostActivity : AppCompatActivity() {
     private lateinit var bottomSheetView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_postv2)
+        setContentView(R.layout.activity_view_post)
 
         bottomSheetBehavior = BottomSheetBehavior.from(commentBottomSheet)
         bottomSheetView = layoutInflater.inflate(R.layout.add_comment_bottomsheet, null)
         viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
 
 
-        toolbar.inflateMenu(R.menu.menu_items)
-        back_to_mainfeed.setOnClickListener {
+        back_to_main.setOnClickListener {
             onBackPressed()
         }
 
@@ -87,10 +82,6 @@ class ViewPostActivity : AppCompatActivity() {
             if(hasFocus) bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-    }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_items, menu)
-        return true
     }
 }
 

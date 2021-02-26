@@ -11,7 +11,7 @@ class UpdatesAdapter(val items:ArrayList<String>):RecyclerView.Adapter<UpdatesAd
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpdatesViewHolder {
         return UpdatesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.horz_scroll_template, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.missed_message_card, parent, false)
         )
     }
 
@@ -25,8 +25,6 @@ class UpdatesAdapter(val items:ArrayList<String>):RecyclerView.Adapter<UpdatesAd
     }
 
     class UpdatesViewHolder(v:View): RecyclerView.ViewHolder(v) {
-        val tvUpdateMsg=v.findViewById<TextView>(R.id.tvMsg)
-
-
+        val tvUpdateMsg: TextView =v.findViewById(R.id.message)
     }
 }

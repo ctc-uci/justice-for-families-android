@@ -6,7 +6,6 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -86,6 +85,8 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private val blueThumb: ImageView = itemView.findViewById(R.id.blue_thumb)
     private val grayThumb: ImageView = itemView.findViewById(R.id.gray_thumb)
     private val likeCount: TextView = itemView.findViewById(R.id.like_num)
+    private val commentCount: TextView = itemView.findViewById(R.id.comment_num)
+    private val actionBar: ConstraintLayout = itemView.findViewById(R.id.action_bar)
     private var likeClick = false
     private var likes = 0
 
@@ -96,6 +97,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         topicHeadline.text = post.title
         likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
+        commentCount.text = String.format(context.resources.getString(R.string.num_comments), post.numComments)
+
+        if(context is ViewPostActivity) actionBar.visibility = View.VISIBLE
 
         like.setOnClickListener {
             likeClick = if(!likeClick){

@@ -8,6 +8,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -18,6 +19,8 @@ import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,15 +34,16 @@ class MainActivity : AppCompatActivity() {
     var page = 1
     var isLoading = false
     val limit = 10
+    var anonymous = false
 
     lateinit var postAdapter: PostsAdapter
     lateinit var layoutManager : LinearLayoutManager
-
 
     //bottom sheet
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottom_sheet: LinearLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +74,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        findViewById<Button>(R.id.close_post_modal_button).setOnClickListener {
+        close_post_modal_button.setOnClickListener {
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
         }
+        anon_switch.setOnCheckedChangeListener{ _, isChecked ->
+            anonymous = isChecked
+            println(anonymous)
+        }
 
-        findViewById<Button>(R.id.post_button).setOnClickListener {
+        post_button.setOnClickListener {
             Log.d("api_call", "post button clicked")
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
             var subject: TextView = findViewById(R.id.title_text)
@@ -84,22 +92,21 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
             else{
                 var tags: List<String> = listOf("x", "y", "z")
-                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,false)
+                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,anonymous)
                 subject.text = ""
                 content.text = ""
             }
-
-
         }
 
         // recycle view
         layoutManager = LinearLayoutManager(this)
         var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        postRecyclerView.isNestedScrollingEnabled = false
         postRecyclerView.layoutManager = layoutManager
         postAdapter = PostsAdapter(this)
         postRecyclerView.adapter = postAdapter
         postRecyclerView.layoutManager = layoutManager
-        getPage()
+        updatePost()
 
 
 
@@ -115,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     if (!isLoading) {
                         if ((visibleItemCount + pastVisibleItem) >= total) {
                             page++
-                            getPage()
+                            updatePost()
                         }
                     }
                     super.onScrolled(recyclerView, dx, dy)
@@ -141,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         var adapter = UpdatesAdapter(items)
         horizontalRecycleView.adapter = adapter
     }
-    fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
+    private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
         PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
@@ -173,22 +180,6 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    fun getPage() {
-        updatePost()
-
-        Handler().postDelayed({
-            findViewById<ProgressBar>(R.id.progressbar).visibility = View.VISIBLE
-            if (::postAdapter.isInitialized) {
-                postAdapter.notifyDataSetChanged()
-            } else {
-                postAdapter = PostsAdapter(this)
-                findViewById<RecyclerView>(R.id.recyclerView).adapter = postAdapter
-            }
-            isLoading = false
-            findViewById<ProgressBar>(R.id.progressbar).visibility = View.GONE
-        }, 2000)
-    }
-
 
     fun updatePost()
     {
@@ -208,6 +199,7 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         postCollection = response.body()!!
                         postAdapter.setPosts(postCollection)
+                        progressbar.visibility = View.GONE
                     } else if (response.code() == 400) {
                         Toast.makeText(applicationContext, "Error finding posts", Toast.LENGTH_LONG)
                             .show()

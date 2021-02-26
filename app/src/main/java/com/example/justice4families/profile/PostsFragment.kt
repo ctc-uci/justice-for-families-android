@@ -13,7 +13,7 @@ import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
 import com.example.justice4families.savedPreferences
-import kotlinx.android.synthetic.main.activity_view_postv2.*
+import kotlinx.android.synthetic.main.activity_view_post.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
