@@ -27,5 +27,7 @@
     <string name="title_activity_user_profile">UserProfileActivity</string>
     <string name="tab_text_1">Posts</string>
     <string name="tab_text_2">Likes</string>
+    <string name="num_shares">0 Shares</string>
+    <string name="num_comments">%1$d Comments</string>
 
 </resources>
