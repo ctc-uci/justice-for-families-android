@@ -4,12 +4,14 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.view.View.OnClickListener;
+
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,14 +22,15 @@ import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.add_tags_bottomsheet.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
+import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickListener{
 
     var postCollection : MutableList<Post> = ArrayList()
 
@@ -35,7 +38,8 @@ class MainActivity : AppCompatActivity() {
     var isLoading = false
     val limit = 10
     var anonymous = false
-
+    var isPressed: Array<Boolean> = Array(6) {false}
+    private var tagsList: ArrayList<String> = ArrayList()
     lateinit var postAdapter: PostsAdapter
     lateinit var layoutManager : LinearLayoutManager
 
@@ -44,18 +48,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottom_sheet: LinearLayout
 
+    private lateinit var sheetBehaviorTags: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottom_sheet_tags: LinearLayout
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         //bottom sheet expansion
-        bottom_sheet = findViewById(R.id.bottom_sheet);
+        bottom_sheet = findViewById(R.id.bottom_sheet)
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+
+        bottom_sheet_tags = findViewById(R.id.add_tags_bottomsheet)
+        sheetBehaviorTags = BottomSheetBehavior.from(bottom_sheet_tags)
 
         bottomNav = findViewById(R.id.bottom_navigation)
 
-        sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
 
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -74,13 +85,31 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        close_post_modal_button.setOnClickListener {
-            sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+        tag1.setOnClickListener(this)
+        tag2.setOnClickListener(this)
+        tag3.setOnClickListener(this)
+        tag4.setOnClickListener(this)
+        tag5.setOnClickListener(this)
+        tag6.setOnClickListener(this)
+
+        add_tags_button.setOnClickListener {
+            sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            sheetBehaviorTags.state = BottomSheetBehavior.STATE_EXPANDED
+            bottom_sheet_tags.visibility = View.VISIBLE
         }
         anon_switch.setOnCheckedChangeListener{ _, isChecked ->
             anonymous = isChecked
-            println(anonymous)
         }
+
+        back_to_post_bottomsheet.setOnClickListener {
+            bottom_sheet_tags.visibility = View.INVISIBLE
+            sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        hide_bottomsheet.setOnClickListener {
+            sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
 
         post_button.setOnClickListener {
             Log.d("api_call", "post button clicked")
@@ -91,8 +120,7 @@ class MainActivity : AppCompatActivity() {
             if(subject.text.isEmpty() || content.text.isEmpty())
                 Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
             else{
-                var tags: List<String> = listOf("x", "y", "z")
-                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tags,anonymous)
+                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tagsList,anonymous)
                 subject.text = ""
                 content.text = ""
             }
@@ -231,5 +259,31 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.tag1 -> changeTagState(p0 as TextView,0)
+            R.id.tag2 -> changeTagState(p0 as TextView,1)
+            R.id.tag3 -> changeTagState(p0 as TextView,2)
+            R.id.tag4 -> changeTagState(p0 as TextView,3)
+            R.id.tag5 -> changeTagState(p0 as TextView,4)
+            R.id.tag6 -> changeTagState(p0 as TextView,5)
+        }
+    }
+
+    private fun changeTagState(view:TextView, index:Int){
+        if(!isPressed[index]){
+            view.background = resources.getDrawable(R.drawable.pressed_tags_rectangle)
+            view.setTextColor(resources.getColor(R.color.white))
+            isPressed[index] = true
+            tagsList.add(view.text.toString())
+        }
+        else {
+            view.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
+            view.setTextColor(resources.getColor(R.color.purple_500))
+            isPressed[index] = false
+            tagsList.remove(view.text.toString())
+        }
     }
 }
