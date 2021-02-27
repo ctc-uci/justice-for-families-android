@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="32dp"
-    android:background="@color/louche"
+    android:background="@drawable/black_bar_border"
     android:id="@+id/commentBottomSheet"
     app:behavior_hideable="false"
     app:behavior_peekHeight="70dp"
@@ -19,6 +19,8 @@
         android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:visibility="gone"
+        android:padding="4dp"
+        android:tint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -31,7 +33,7 @@
         android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -45,9 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/add_comment_border"
-            android:hint="Add Comment..."
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp" />
+            android:hint="Add Comment..." />
 
         <TextView
             android:id="@+id/comment_button"
