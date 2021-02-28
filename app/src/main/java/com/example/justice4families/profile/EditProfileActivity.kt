@@ -28,11 +28,13 @@ class EditProfileActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener{
             saveClicked = true
+            //updateProfileInfo()
         }
 
         backButton.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(this)
             if(saveClicked){
+
                 finish()
             }
             else{
@@ -50,6 +52,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
+
         var data = intent
         var email = data.getStringExtra("email")
         var password = data.getStringExtra("password")
@@ -60,6 +63,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         var profileImage : de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.edit_profile_pic)
         profileImage.setOnClickListener{
+
             Log.d("TAG", "CLicked")
         }
 
