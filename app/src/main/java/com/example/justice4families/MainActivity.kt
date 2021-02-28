@@ -3,12 +3,15 @@ package com.example.justice4families
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.widget.*
 import android.view.View.OnClickListener;
-
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -57,6 +60,10 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var postButton: TextView = findViewById(R.id.post_button)
+        var titleText: TextView = findViewById(R.id.title_text)
+        var postBodyText: TextView = findViewById(R.id.post_body_text)
+
         //bottom sheet expansion
         bottom_sheet = findViewById(R.id.bottom_sheet)
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -72,6 +79,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             when (item.itemId) {
                 R.id.ic_addpost -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_EXPANDED)
+                    postButton.isEnabled = false
                 }
                 R.id.ic_profile -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
@@ -101,6 +109,65 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             anonymous = isChecked
         }
 
+        // disabling post button if input invalid
+
+        titleText.addTextChangedListener(object: TextWatcher {
+            override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
+                if (s.toString().trim({ it <= ' ' }).isEmpty() || postBodyText.text.isEmpty())
+                {
+                    postButton.setEnabled(false)
+                    postButton.setTextColor(Color.BLACK)
+                }
+                else
+                {
+                    postButton.setEnabled(true)
+                    postButton.setTextColor(Color.parseColor("#19769D"))
+                }
+            }
+            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int,
+                                           after:Int) {
+                // TODO Auto-generated method stub
+            }
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+        })
+        postBodyText.addTextChangedListener(object: TextWatcher {
+            override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
+                if (s.toString().trim({ it <= ' ' }).isEmpty() || titleText.text.isEmpty())
+                {
+                    postButton.setEnabled(false)
+                    postButton.setTextColor(Color.BLACK)
+                }
+                else
+                {
+                    postButton.setEnabled(true)
+                    postButton.setTextColor(Color.parseColor("#19769D"))
+
+                }
+            }
+            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int,
+                                           after:Int) {
+                // TODO Auto-generated method stub
+            }
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+        })
+
+        postButton.setOnClickListener {
+            Log.d("api_call", "post button clicked")
+            sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
+            var subject: TextView = findViewById(R.id.title_text)
+            var content: TextView = findViewById(R.id.post_body_text)
+            sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tagsList,anonymous)
+            subject.text = ""
+            content.text = ""
+
+        }
+
+
+
         back_to_post_bottomsheet.setOnClickListener {
             bottom_sheet_tags.visibility = View.INVISIBLE
             sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -108,22 +175,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
         hide_bottomsheet.setOnClickListener {
             sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
-
-
-        post_button.setOnClickListener {
-            Log.d("api_call", "post button clicked")
-            sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
-            var subject: TextView = findViewById(R.id.title_text)
-            var content: TextView = findViewById(R.id.post_body_text)
-
-            if(subject.text.isEmpty() || content.text.isEmpty())
-                Toast.makeText(applicationContext,"Subject or Content is empty",Toast.LENGTH_LONG).show()
-            else{
-                sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tagsList,anonymous)
-                subject.text = ""
-                content.text = ""
-            }
         }
 
         // recycle view
@@ -135,7 +186,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         postRecyclerView.adapter = postAdapter
         postRecyclerView.layoutManager = layoutManager
         updatePost()
-
 
 
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -184,22 +234,20 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.d("api_call",t.message.toString())
-                    Log.d("api_call","NOOO")
+                    Toast.makeText(applicationContext,"Failed to post. Check your network connection.",Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    Log.d("api_call","success")
+                    Log.d("api_call","onResponse")
                     Log.d("api_call",  response.raw().toString())
                     Log.d("api_call",  response.body().toString())
-                    print(response.body())
-                    if(response.code().toString() == "200")
-                        Toast.makeText(applicationContext,"Post Added",Toast.LENGTH_LONG).show()
-                    else
-                        Toast.makeText(applicationContext,"Post Failed",Toast.LENGTH_LONG).show()
+                    if(response.code().toString() != "200")
+                    {
+                        Toast.makeText(applicationContext, "Failed to post. Response Code: " + response.code().toString(), Toast.LENGTH_LONG).show()
+                    }
                     Log.d("api_call",response.toString())
                     Log.d("api_call",response.code().toString())
 
