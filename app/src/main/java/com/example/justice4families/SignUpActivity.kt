@@ -59,21 +59,17 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun checkInfo(email:String, password1:String, password2:String){
         if(email.isEmpty()){
-            Toast.makeText(this, "Please Enter an Email Address", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Please enter an email address!"
         }
         else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Please Enter a valid Email Address", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Please enter a valid email address!"
         }
         else if(password1.isEmpty()) {
-            Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Please enter a password!"
             pass_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
 
         }
         else if (password1 != password2 || password2.isEmpty()) {
-            Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Your passwords don't match. Please try again!"
             confirm_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
         }
@@ -101,7 +97,6 @@ class SignUpActivity : AppCompatActivity() {
                     })
             }
             else {
-                Toast.makeText(this, "Password does not meet requirements", Toast.LENGTH_LONG).show()
                 error_message_signup.text = "Your password doesn't meet the criteria below!"
             }
         }
