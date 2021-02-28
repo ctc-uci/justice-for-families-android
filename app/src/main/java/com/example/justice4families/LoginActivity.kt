@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.model.LoginRequest
+import kotlinx.android.synthetic.main.activity_login.hide_password
+import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.view.*
+import kotlinx.android.synthetic.main.activity_signup.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +29,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         login_button.setOnClickListener {
-            var email : String = email.text.toString()
+            email_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
+            password_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
+            error_message.text = ""
+            var email : String = email_text.text.toString()
             var password : String = password.password_text.text.toString()
             if(validateLogin(email, password))  {
                 loginRequest(email, password)
@@ -89,6 +95,8 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                     } else if(response.code() == 500) {
                         error_message.text = "Wrong username or password!"
+                        email_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
+                        password_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
                     }
 
                 }

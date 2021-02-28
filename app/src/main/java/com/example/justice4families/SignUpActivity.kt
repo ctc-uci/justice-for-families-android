@@ -29,6 +29,8 @@ class SignUpActivity : AppCompatActivity() {
             onBackPressed()
         }
         signup_button.setOnClickListener {
+            pass_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
+            confirm_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
             checkInfo(email_signup.text.toString(), password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
         }
         hide_password.setOnClickListener{
@@ -64,13 +66,16 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Please Enter a valid Email Address", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Please enter a valid email address!"
         }
-        else if(password1.isEmpty() or password2.isEmpty()) {
+        else if(password1.isEmpty()) {
             Toast.makeText(this, "Please Enter a Password", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Please enter a password!"
+            pass_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
+
         }
-        else if (password1 != password2) {
+        else if (password1 != password2 || password2.isEmpty()) {
             Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show()
             error_message_signup.text = "Your passwords don't match. Please try again!"
+            confirm_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
         }
         else {
             if (validatePassword(password1)) {
