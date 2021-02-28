@@ -15,7 +15,7 @@ import com.example.justice4families.savedPreferences
 import de.hdodenhof.circleimageview.CircleImageView
 import java.net.Authenticator
 
-class EditProfile : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,15 +24,15 @@ class EditProfile : AppCompatActivity() {
         val backButton: Button = findViewById(R.id.edit_profile_back)
 
         val saveButton: Button = findViewById(R.id.saveProfileInfo)
-        var clicked: Boolean = false
+        var saveClicked: Boolean = false
 
         saveButton.setOnClickListener{
-            clicked = true
+            saveClicked = true
         }
 
         backButton.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(this)
-            if(clicked){
+            if(saveClicked){
                 finish()
             }
             else{
@@ -44,21 +44,10 @@ class EditProfile : AppCompatActivity() {
                     .setNegativeButton("Cancel", DialogInterface.OnClickListener {
                             dialogInterface, i -> dialogInterface.cancel()
                     })
-            }
-
-
-            val alert = dialogBuilder.create()
-            if(clicked){
-                alert.show()
-            }
-            else{
+                val alert = dialogBuilder.create()
                 alert.setTitle("Discard Changes")
                 alert.show()
             }
-
-
-
-
         }
 
         var data = intent

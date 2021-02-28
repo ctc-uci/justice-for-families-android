@@ -63,7 +63,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         editProfileBtn.setOnClickListener{
-            val intent = Intent(this, EditProfile::class.java)
+            val intent = Intent(this, EditProfileActivity::class.java)
             val user = savedPreferences.getUserName()
             intent.putExtra("email", user)
 
