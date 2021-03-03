@@ -229,7 +229,10 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
-        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null, likes = 0))
+        var name = username
+        if(anon == true)
+            name = "Anonymous"
+        PostApi().addPost(Post(_id = null, username=name, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null, likes = 0))
             .enqueue(object: Callback<ResponseBody> {
 
 
