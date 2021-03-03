@@ -14,5 +14,6 @@ data class Post (
     val anonymous: Boolean?,
     val title: String?,
     val text: String?,
-    val media: String?
+    val media: String?,
+    var likes: Int?
 ): Parcelable

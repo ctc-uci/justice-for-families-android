@@ -8,7 +8,7 @@
     tools:context=".profile.PostsFragment">
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/viewpost_progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
