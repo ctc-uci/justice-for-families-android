@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
-        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
+        PostApi().addPost(Post(_id = null, username=username, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null, likes = 0))
             .enqueue(object: Callback<ResponseBody> {
 
 
@@ -307,6 +307,11 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updatePost()
     }
 
     override fun onClick(p0: View?) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,6 @@ import com.example.justice4families.PostsAdapter
 import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
-import com.example.justice4families.savedPreferences
 import kotlinx.android.synthetic.main.activity_view_post.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,6 +26,7 @@ class PostsFragment : Fragment() {
     private lateinit var adapter: PostsAdapter
     private lateinit var userName: String
     var postCollection : MutableList<Post> = ArrayList()
+    private lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +42,16 @@ class PostsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView= view.findViewById(R.id.post_recycler)
+        progressbar = view.findViewById(R.id.viewpost_progressbar)
         adapter = PostsAdapter(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(requireContext())
         userName = (activity as UserProfileActivity).userName
 
+        getUserPost()
+    }
+
+    private fun getUserPost(){
         PostApi().getPostsByUsername(userName)
             .enqueue(object : Callback<MutableList<Post>> {
                 override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
@@ -60,7 +66,7 @@ class PostsFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         postCollection = response.body()!!
-                        progressBar.visibility = View.GONE
+                        progressbar.visibility = View.GONE
                         adapter.setPosts(postCollection)
                     } else if (response.code() == 400) {
                         Toast.makeText(activity, "Error finding posts", Toast.LENGTH_LONG)
@@ -68,6 +74,11 @@ class PostsFragment : Fragment() {
                     }
                 }
             })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getUserPost()
     }
 
     companion object {
