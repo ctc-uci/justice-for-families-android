@@ -10,6 +10,11 @@ import retrofit2.http.POST
 
 interface EditApi {
 
+    @POST("authentication/changePassword")
+    fun editUserPassword(
+        @Body request: EditProfileRequest
+    ) : Call<ResponseBody>
+
     @POST("authentication/update/picture")
     fun editUserPicture(
         @Body request: EditProfileRequest
