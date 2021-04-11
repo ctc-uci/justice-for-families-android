@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/profile_pic"/>
+        <TextView
+
+            android:id="@+id/tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/profile_pic"
+            android:layout_below="@+id/username"
+            android:text="tags"
+            android:paddingTop="5dp"/>
+
+        <TextView
+
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@username"
+            android:layout_toRightOf="@+id/profile_pic"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="subject"
+            android:layout_below="@+id/profile_pic"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/content"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/subject"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrudcupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            android:textColor="@color/black"
+            />
+        /* like button */
+        <ImageButton
+            android:id="@+id/like_button"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content"
+            android:src="@drawable/ic_baseline_thumb_up_24"
+            android:background="#00000000"
+
+            />
+
+        <TextView
+            android:id="@+id/like_counter"
+            android:paddingLeft="10dp"
+            android:paddingTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content"
+            android:layout_toRightOf="@+id/like_button"
+            android:text="20"
+            android:textColor="@color/black"
+            />
+
+        /* share button */
+        <Button
+            android:id="@+id/share_button"
+            android:paddingTop="10dp"
+            android:padding="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/content"
+            android:background="@android:color/transparent"
+            android:text="shares"
+            android:textSize="10dp"
+            android:textColor="@color/black"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            />
+        <TextView
+            android:id="@+id/share_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:layout_toLeftOf="@+id/share_button"
+            android:layout_below="@+id/content"
+            android:paddingTop="5dp"
+            android:paddingRight="4dp"
+            android:paddingLeft="8dp"
+            />
+        /* comment button */
+        <Button
+            android:id="@+id/comment_button"
+            android:paddingTop="10dp"
+            android:padding="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@id/share_counter"
+            android:layout_below="@+id/content"
+            android:background="@android:color/transparent"
+            android:text="comments"
+            android:textSize="10dp"
+            android:textColor="@color/black"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+
+
+            />
+        <TextView
+            android:id="@+id/comment_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:layout_toLeftOf="@+id/comment_button"
+            android:layout_below="@+id/content"
+            android:paddingTop="5dp"
+            android:paddingRight="4dp"
+            />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

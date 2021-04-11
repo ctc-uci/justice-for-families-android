@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity">
+
+
+    <TextView
+        android:id="@+id/create_account"
+        android:layout_width="251dp"
+        android:layout_height="72dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:gravity="top"
+        android:text="@string/create_account"
+        android:textAppearance="@style/create_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="277dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rectangle_9"
+        android:fontFamily="@font/poppins"
+        android:hint="@string/name"
+        android:inputType="text"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:textColorHint="#19769D"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_account" />
+
+    <EditText
+        android:id="@+id/email_signup"
+        android:layout_width="277dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rectangle_9"
+        android:fontFamily="@font/poppins"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:textColorHint="#19769D"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/error_message_signup"
+        android:layout_width="309dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:textAppearance="@style/error_message_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <FrameLayout
+        android:id="@+id/password"
+        android:layout_width="277dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_signup">
+
+        <EditText
+            android:id="@+id/pass_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_9"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:singleLine="true"
+            android:textColorHint="#19769D" />
+
+        <ImageButton
+            android:id="@+id/hide_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/password_hide_show" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/confirm_pass"
+        android:layout_width="277dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pass_req">
+
+        <EditText
+            android:id="@+id/confirm_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_9"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:singleLine="true"
+            android:textColorHint="#19769D" />
+
+        <ImageButton
+            android:id="@+id/hide_password_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/password_hide_show" />
+    </FrameLayout>
+
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="104dp"
+        android:text="@string/already_a_member"
+        android:textAppearance="@style/login_link"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_button"
+        app:layout_constraintVertical_bias="0.068" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signup_button"
+        android:layout_width="277.09dp"
+        android:layout_height="55dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/button_rectangle"
+        android:fontFamily="@font/poppins"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_pass" />
+
+    <TextView
+        android:id="@+id/back_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:paddingStart="8dp"
+        android:text="@string/login"
+        android:textAppearance="@style/login_link"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.032"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/signup_button"
+        app:layout_constraintVertical_bias="0.074" />
+
+    <TextView
+        android:id="@+id/pass_req"
+        android:layout_width="233dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="50dp"
+        android:text="@string/pass_req"
+        android:textAppearance="@style/pass_req"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_pass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_message_signup"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
