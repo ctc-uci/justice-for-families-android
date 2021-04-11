@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         //set up horizontal recycler view
         val horizontalRecycleView = findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
         val horizontalLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-        horizontalRecycleView.setHasFixedSize(true)
+        horizontalRecycleView.setHasFixedSize(false)
         horizontalRecycleView.setItemViewCacheSize(20)
         horizontalRecycleView.layoutManager = horizontalLayoutManager
         var adapter = UpdatesAdapter(items)
