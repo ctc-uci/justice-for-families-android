@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598802074636",
+    "project_id": "j4f-android",
+    "storage_bucket": "j4f-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598802074636:android:6e255e06b05d5f87b3f229",
+        "android_client_info": {
+          "package_name": "com.example.justice4families"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598802074636-pl0lqm6bfs3aeii648nakt3askcenohk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxD-9IBbKS3zIfzYyg7cc5_ElZ5C3bCb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598802074636-pl0lqm6bfs3aeii648nakt3askcenohk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
