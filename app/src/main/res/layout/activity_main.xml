@@ -71,7 +71,8 @@
                 android:text="What you've missed..."
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewHorizontal"

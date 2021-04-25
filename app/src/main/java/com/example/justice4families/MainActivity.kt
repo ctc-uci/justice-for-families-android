@@ -225,6 +225,8 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         horizontalRecycleView.layoutManager = horizontalLayoutManager
         var adapter = UpdatesAdapter(items)
         horizontalRecycleView.adapter = adapter
+        // hide because we don't have real data to show
+        horizontalRecycleView.visibility = View.GONE
     }
     private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
