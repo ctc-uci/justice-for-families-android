@@ -1,11 +1,15 @@
 package com.example.justice4families
 
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 fun getDateTime(): String{
-    return SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(Date())
+    val current = LocalDateTime.now(ZoneId.of("GMT"))
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return current.format(formatter)
 }
 
 object savedPreferences{
