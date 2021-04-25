@@ -2,15 +2,14 @@ package com.example.justice4families
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import android.text.*
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.model.LoginRequest
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.hide_password
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.view.*
@@ -40,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         hide_password.setOnClickListener {
+            val cursorPosition: Int = password_text.selectionStart
             if(!isPasswordVisible){
                 password_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 isPasswordVisible = true
@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
                 isPasswordVisible = false
                 hide_password.isActivated = false
             }
+            password_text.setSelection(cursorPosition);
         }
 
         join_now.setOnClickListener {
@@ -78,9 +79,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginRequest(email: String, password: String) {
         AuthenticationApi().loginUser(LoginRequest(email, password))
-            .enqueue(object: Callback<ResponseBody> {
+            .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
                     println(t.message)
                 }
 
@@ -88,15 +90,20 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if(response.isSuccessful)
-                    {
+                    if (response.isSuccessful) {
                         savedPreferences.setUserName(email)
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
-                    } else if(response.code() == 500) {
+                    } else if (response.code() == 500) {
                         error_message.text = "Wrong username or password!"
-                        email_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
-                        password_text.background = resources.getDrawable(R.drawable.error_rectangle, theme)
+                        email_text.background = resources.getDrawable(
+                            R.drawable.error_rectangle,
+                            theme
+                        )
+                        password_text.background = resources.getDrawable(
+                            R.drawable.error_rectangle,
+                            theme
+                        )
                     }
 
                 }
