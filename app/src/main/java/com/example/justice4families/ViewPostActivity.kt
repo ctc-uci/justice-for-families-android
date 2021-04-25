@@ -14,7 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_view_post.*
 import kotlinx.android.synthetic.main.add_comment_bottomsheet.*
-
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ViewPostActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -68,6 +69,7 @@ class ViewPostActivity : AppCompatActivity() {
                         comment_button.setOnClickListener {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                             //save comment associated with this post
+
                             viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.getUserName(),0, post._id, getDateTime()))
 
                         }
