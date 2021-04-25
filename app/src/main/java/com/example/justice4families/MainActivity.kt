@@ -54,13 +54,14 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private lateinit var sheetBehaviorTags: BottomSheetBehavior<LinearLayout>
     private lateinit var bottom_sheet_tags: LinearLayout
 
+    private lateinit var postButton: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var postButton: TextView = findViewById(R.id.post_button)
+        postButton = findViewById(R.id.post_button)
         var titleText: TextView = findViewById(R.id.title_text)
         var postBodyText: TextView = findViewById(R.id.post_body_text)
 
@@ -113,7 +114,8 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
         titleText.addTextChangedListener(object: TextWatcher {
             override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
-                if (s.toString().trim({ it <= ' ' }).isEmpty() || postBodyText.text.isEmpty())
+                if (s.toString().trim({ it <= ' ' }).isEmpty() || postBodyText.text.isEmpty()
+                    || tagsList.isEmpty())
                 {
                     postButton.setEnabled(false)
                     postButton.setTextColor(Color.BLACK)
@@ -134,7 +136,8 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         })
         postBodyText.addTextChangedListener(object: TextWatcher {
             override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
-                if (s.toString().trim({ it <= ' ' }).isEmpty() || titleText.text.isEmpty())
+                if (s.toString().trim({ it <= ' ' }).isEmpty() || titleText.text.isEmpty()
+                    || tagsList.isEmpty())
                 {
                     postButton.setEnabled(false)
                     postButton.setTextColor(Color.BLACK)
@@ -331,17 +334,20 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     }
 
     private fun changeTagState(view:TextView, index:Int){
-        if(!isPressed[index]){
+        if (!isPressed[index]) {
             view.background = resources.getDrawable(R.drawable.pressed_tags_rectangle)
             view.setTextColor(resources.getColor(R.color.white))
             isPressed[index] = true
             tagsList.add(view.text.toString())
-        }
-        else {
+        } else {
             view.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
             view.setTextColor(resources.getColor(R.color.purple_500))
             isPressed[index] = false
             tagsList.remove(view.text.toString())
+            if (tagsList.isEmpty()) {
+                postButton.isEnabled = false
+                postButton.setTextColor(Color.BLACK)
+            }
         }
     }
 }
