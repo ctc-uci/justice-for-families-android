@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
             var subject: TextView = findViewById(R.id.title_text)
             var content: TextView = findViewById(R.id.post_body_text)
-            sendPost(savedPreferences.getUserName(), subject.text.toString(),content.text.toString(),tagsList,anonymous)
+            sendPost(savedPreferences.username, subject.text.toString(),content.text.toString(),tagsList,anonymous)
             subject.text = ""
             content.text = ""
 

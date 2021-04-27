@@ -69,8 +69,7 @@ class ViewPostActivity : AppCompatActivity() {
                         comment_button.setOnClickListener {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                             //save comment associated with this post
-
-                            viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.getUserName(),0, post._id, getDateTime()))
+                            viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.username,0, post._id, getDateTime()))
 
                         }
                     }

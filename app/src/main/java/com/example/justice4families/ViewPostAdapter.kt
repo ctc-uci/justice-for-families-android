@@ -132,12 +132,12 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         val runnable = Runnable {
             if (postLiked != originalLiked) {
                 originalLiked = if (originalLiked) {
-                    unlikePost(post._id!!, savedPreferences.getUserName())
+                    unlikePost(post._id!!, savedPreferences.username)
                     Log.d("runnable", "post like was changed, post originally liked")
                     false
                 }
                 else {
-                    likePost(post._id!!, savedPreferences.getUserName())
+                    likePost(post._id!!, savedPreferences.username)
                     Log.d("runnable", "post like was changed, post NOT originally liked")
                     true
                 }

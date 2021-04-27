@@ -90,9 +90,11 @@ class SignUpActivity : AppCompatActivity() {
                             response: Response<ResponseBody>
                         ) {
                             if(response.code()==200) {
-                                savedPreferences.setUserName(email)
+                                savedPreferences.username = email;
+                                savedPreferences.loggedin = true;
                                 val intent = Intent(applicationContext, MainActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             }
                             else{
                                 Toast.makeText(applicationContext, "Email or Password already exists", Toast.LENGTH_LONG).show()
