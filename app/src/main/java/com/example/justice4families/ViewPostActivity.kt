@@ -70,7 +70,7 @@ class ViewPostActivity : AppCompatActivity() {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                             //save comment associated with this post
                             viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.username,0, post._id, getDateTime()))
-
+                            comment_text.text?.clear() //clears input box
                         }
                     }
                     else -> null
