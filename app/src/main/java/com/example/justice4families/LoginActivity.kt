@@ -27,6 +27,13 @@ class LoginActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        if(savedPreferences.loggedin)
+        {
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         login_button.setOnClickListener {
             email_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
             password_text.background = resources.getDrawable(R.drawable.rectangle_9, theme)
@@ -90,11 +97,15 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if (response.isSuccessful) {
-                        savedPreferences.setUserName(email)
+                    if(response.isSuccessful)
+                    {
+                        //savedPreferences.setUserName(email)
+                        savedPreferences.username = email;
+                        savedPreferences.loggedin = true;
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
-                    } else if (response.code() == 500) {
+                        finish()
+                    } else if(response.code() == 500) {
                         error_message.text = "Wrong username or password!"
                         email_text.background = resources.getDrawable(
                             R.drawable.error_rectangle,
