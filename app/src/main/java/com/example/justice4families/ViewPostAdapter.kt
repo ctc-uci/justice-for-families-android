@@ -95,7 +95,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
 class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
     private val username: TextView = itemView.findViewById(R.id.post_username)
-
+    private val tags: TextView = itemView.findViewById(R.id.post_tags)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
     val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
@@ -123,6 +123,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
         postContent.text = post.text
         topicHeadline.text = post.title
+        tags.text = setTag(post.tags)
         likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
 
@@ -237,6 +238,19 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             })
     }
 
+    private fun setTag(tagsList: List<String>?): String {
+        if (tagsList != null) {
+            var tag = tagsList[0]
+
+            if (!tag.startsWith("#")) {
+                tag = "#$tag"
+            }
+
+            return tag
+        }
+
+        return ""
+    }
 }
 
 private fun getDateAndTime(dateIn: String, timeIn: String): String {

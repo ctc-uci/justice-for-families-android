@@ -10,7 +10,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import android.widget.*
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                     val intent = Intent(this, UserProfileActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.ic_search -> {
+                R.id.ic_home -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
                 }
             }

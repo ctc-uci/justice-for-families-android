@@ -4,18 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.justice4families.MainActivity
 import com.example.justice4families.LoginActivity
 import com.example.justice4families.R
 import com.example.justice4families.savedPreferences
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_user_profile.*
-import kotlinx.android.synthetic.main.post_item.*
 
 class UserProfileActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: BottomNavigationView
     var userName = savedPreferences.username
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -64,6 +69,23 @@ class UserProfileActivity : AppCompatActivity() {
 
         back_on_profile.setOnClickListener{
             onBackPressed()
+        }
+
+        bottomNav = findViewById(R.id.bottom_nav)
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_addpost -> {
+
+                }
+                R.id.ic_profile -> {
+
+                }
+                R.id.ic_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
         }
     }
 
