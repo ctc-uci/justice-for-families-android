@@ -240,15 +240,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
     private fun setTag(tagsList: List<String>?): String {
         if (tagsList != null) {
-            var tag = tagsList[0]
-
-            if (!tag.startsWith("#")) {
-                tag = "#$tag"
-            }
-
+            var tag = tagsList[0].removePrefix("#")
             return tag
         }
-
         return ""
     }
 }
