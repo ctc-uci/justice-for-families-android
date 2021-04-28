@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <item
@@ -10,6 +11,10 @@
         android:id="@+id/ic_addpost"
         android:icon="@drawable/ic_addpost"
         android:title="NewPost"/>
+    <item
+        android:id="@+id/ic_notification"
+        android:icon="@drawable/ic_baseline_notifications_none_24"
+        android:title="Notification" />
     <item
         android:id="@+id/ic_profile"
         android:icon="@drawable/ic_profile"
