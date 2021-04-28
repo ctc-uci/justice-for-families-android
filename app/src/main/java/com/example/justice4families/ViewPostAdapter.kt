@@ -266,10 +266,6 @@ private fun getDateAndTime(dateIn: String, timeIn: String): String {
         return "${currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()} min ago"  // Same hour
     }
     else if (dateIn == currDate) {
-        println("currTime: $currTime")
-        println("timeIn: $timeIn")
-        println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
-        println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
         return "${currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()} hr ago"  // Same day
     }
     else if ( (dateIn.substring(0,7) == currDate.substring(0,7)) && ((currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()) < 7) ) {

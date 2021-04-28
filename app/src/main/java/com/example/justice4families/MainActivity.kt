@@ -89,6 +89,11 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                 R.id.ic_home -> {
                     sheetBehavior.state = (BottomSheetBehavior.STATE_HIDDEN)
                 }
+                R.id.ic_notification -> {
+                    sheetBehavior.state= (BottomSheetBehavior.STATE_HIDDEN)
+                    val intent = Intent(this, NotificationActivity::class.java)
+                    startActivity(intent)
+                }
             }
             true
         }
