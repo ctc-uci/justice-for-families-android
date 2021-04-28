@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
@@ -33,7 +34,7 @@ import retrofit2.Response
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), OnClickListener{
-
+    lateinit var swipeContainer: SwipeRefreshLayout
     var postCollection : MutableList<Post> = ArrayList()
 
     var page = 1
@@ -181,6 +182,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
         // recycle view
         layoutManager = LinearLayoutManager(this)
+        swipeContainer =  findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout);
         var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         postRecyclerView.isNestedScrollingEnabled = false
         postRecyclerView.layoutManager = layoutManager
@@ -189,6 +191,11 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         postRecyclerView.layoutManager = layoutManager
         updatePost()
 
+        swipeRefreshLayout.setOnRefreshListener {
+            Log.d("checking1", "Refreshing feed")
+            updatePost()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
         findViewById<RecyclerView>(R.id.recyclerView).addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -208,7 +215,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                     super.onScrolled(recyclerView, dx, dy)
                 }
             })
-
 
         
         //dummy list for horizontal scroll
@@ -264,8 +270,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     }
 
 
-    fun updatePost()
-    {
+    fun updatePost() {
 
         PostApi().getAllPosts()
             .enqueue(object : Callback<MutableList<Post>> {
@@ -291,7 +296,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             })
 
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
