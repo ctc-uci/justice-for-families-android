@@ -55,6 +55,8 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private lateinit var bottom_sheet_tags: LinearLayout
 
     private lateinit var postButton: TextView
+    private lateinit var titleText: TextView
+    private lateinit var postBodyText: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +64,8 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         setContentView(R.layout.activity_main)
 
         postButton = findViewById(R.id.post_button)
-        var titleText: TextView = findViewById(R.id.title_text)
-        var postBodyText: TextView = findViewById(R.id.post_body_text)
+        titleText = findViewById(R.id.title_text)
+        postBodyText = findViewById(R.id.post_body_text)
 
         //bottom sheet expansion
         bottom_sheet = findViewById(R.id.bottom_sheet)
@@ -324,7 +326,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     }
 
     override fun onClick(p0: View?) {
-        when(p0?.id){
+        when(p0?.id) {
             R.id.tag1 -> changeTagState(p0 as TextView,0)
             R.id.tag2 -> changeTagState(p0 as TextView,1)
             R.id.tag3 -> changeTagState(p0 as TextView,2)
@@ -340,6 +342,10 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             view.setTextColor(resources.getColor(R.color.white))
             isPressed[index] = true
             tagsList.add(view.text.toString())
+            if (!(postBodyText.text.isEmpty() || titleText.text.isEmpty())) {
+                postButton.isEnabled = true
+                postButton.setTextColor(Color.parseColor("#19769D"))
+            }
         } else {
             view.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
             view.setTextColor(resources.getColor(R.color.purple_500))
