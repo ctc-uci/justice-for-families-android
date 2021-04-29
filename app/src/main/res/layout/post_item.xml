@@ -22,14 +22,13 @@
             android:paddingTop="5dp"/>
 
         <TextView
-
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="\@username"
             android:layout_toRightOf="@+id/profile_pic"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/black" />
+
         <TextView
             android:id="@+id/subject"
             android:layout_width="wrap_content"

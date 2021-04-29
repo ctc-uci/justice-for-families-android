@@ -240,8 +240,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     {
         Log.d("api_call", "SENT")
         var name = username
-        if(anon == true)
-            name = "Anonymous"
         PostApi().addPost(Post(_id = null, username=name, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null, likes = 0))
             .enqueue(object: Callback<ResponseBody> {
 
