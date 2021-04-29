@@ -34,4 +34,8 @@
 
     <string name="create_account"><b>Create an account</b>,\nSign up to get started!</string>
 
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="log_out">Log Out</string>
+    <string name="delete_account">Delete Account</string>
+
 </resources>
