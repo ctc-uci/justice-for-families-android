@@ -108,8 +108,8 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private var likes = 0
     var likeHandler = Handler()
 
-    fun setPost(post: Post){
-        username.text = post.username
+    fun setPost(post: Post) {
+        username.text = if (post.anonymous!!) "Anonymous" else post.username
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)
             val timeFromBackend = post.datePosted.substring(11, 19)
