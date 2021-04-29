@@ -24,8 +24,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -95,7 +93,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
 class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
     private val username: TextView = itemView.findViewById(R.id.post_username)
-    private val tags: TextView = itemView.findViewById(R.id.post_tags)
+//    private val tags: TextView = itemView.findViewById(R.id.post_tag1)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
     val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
@@ -123,7 +121,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
         postContent.text = post.text
         topicHeadline.text = post.title
-        tags.text = setTag(post.tags)
+        setTag(itemView, post.tags)
         likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
 
@@ -238,12 +236,21 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             })
     }
 
-    private fun setTag(tagsList: List<String>?): String {
+    private fun setTag(view: View, tagsList: List<String>?) {
+        val tag1: TextView = view.findViewById(R.id.post_tag1)
+        val tag2: TextView = view.findViewById(R.id.post_tag2)
+
         if (tagsList != null) {
-            var tag = tagsList[0].removePrefix("#")
-            return tag
+            tag1.text = tagsList[0].removePrefix("#")
+
+            if (tagsList.size > 1) {
+                tag2.text = tagsList[1].removePrefix("#")
+            }
+            else {
+                tag2.visibility = View.INVISIBLE
+            }
+
         }
-        return ""
     }
 }
 
