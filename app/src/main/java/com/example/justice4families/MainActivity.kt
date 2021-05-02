@@ -242,7 +242,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     {
         Log.d("api_call", "SENT")
         var name = username
-        PostApi().addPost(Post(_id = null, username=name, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null, likes = 0))
+        PostApi().addPost(Post(_id = null, username=name, title=subject,text=content,tags=tags,anonymous = anon,numComments = 0, numLikes = 0, datePosted = null, media = null))
             .enqueue(object: Callback<ResponseBody> {
 
 
@@ -277,7 +277,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                 override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
                     Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG)
                         .show()
-                    println(t.message)
+                    Log.e("Get posts", t.message.toString())
                 }
 
                 override fun onResponse(

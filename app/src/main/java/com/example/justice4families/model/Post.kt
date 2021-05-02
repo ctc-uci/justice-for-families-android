@@ -9,11 +9,10 @@ data class Post (
     val username: String?,
     val tags: List<String>?,
     val datePosted: String?,
-    val numComments: Int?,
-    val numLikes: Int?,
+    var numComments: Int?,
+    var numLikes: Int?,
     val anonymous: Boolean?,
     val title: String?,
     val text: String?,
-    val media: String?,
-    var likes: Int?
+    val media: String?
 ): Parcelable

@@ -177,7 +177,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
                 false
             }
             likeCount.text = likes.toString()
-            post.likes = likes
+            post.numLikes = likes
         }
 
         comment.setOnClickListener {
