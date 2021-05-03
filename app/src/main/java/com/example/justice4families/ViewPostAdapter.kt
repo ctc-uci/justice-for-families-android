@@ -94,7 +94,6 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
 class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
     private val username: TextView = itemView.findViewById(R.id.post_username)
-//    private val tags: TextView = itemView.findViewById(R.id.post_tag1)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
     val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
@@ -249,7 +248,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
                 tag2.text = tagsList[1].removePrefix("#")
             }
             else {
-                tag2.visibility = View.INVISIBLE
+                tag2.visibility = View.GONE
             }
 
         }
