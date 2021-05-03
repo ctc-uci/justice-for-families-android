@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,13 +15,17 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.justice4families.data.PostApi
+import com.example.justice4families.model.UpdatesRequest
+import com.example.justice4families.model.CommentUpdate
 import com.example.justice4families.model.Post
+import com.example.justice4families.model.Update
 import com.example.justice4families.profile.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,6 +36,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), OnClickListener{
@@ -45,6 +51,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private var tagsList: ArrayList<String> = ArrayList()
     lateinit var postAdapter: PostsAdapter
     lateinit var layoutManager : LinearLayoutManager
+    lateinit var updateAdapter: UpdatesAdapter
 
     //bottom sheet
     private lateinit var bottomNav: BottomNavigationView
@@ -59,6 +66,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
     private lateinit var postBodyText: TextView
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -171,8 +179,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
         }
 
-
-
         back_to_post_bottomsheet.setOnClickListener {
             bottom_sheet_tags.visibility = View.INVISIBLE
             sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -196,6 +202,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         swipeRefreshLayout.setOnRefreshListener {
             Log.d("checking1", "Refreshing feed")
             updatePost()
+            loadMissedUpdates(savedPreferences.username)
             swipeRefreshLayout.isRefreshing = false
         }
 
@@ -218,25 +225,16 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                 }
             })
 
-        
-        //dummy list for horizontal scroll
-        var items = ArrayList<String>()
-        for (i in 1..10) {
-            val a = "Missed Message "
-            val b = i
-            items.add(a + b)
-        }
-
         //set up horizontal recycler view
         val horizontalRecycleView = findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
         val horizontalLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
         horizontalRecycleView.setHasFixedSize(true)
         horizontalRecycleView.setItemViewCacheSize(20)
         horizontalRecycleView.layoutManager = horizontalLayoutManager
-        var adapter = UpdatesAdapter(items)
-        horizontalRecycleView.adapter = adapter
-        // hide because we don't have real data to show
-        horizontalRecycleView.visibility = View.GONE
+        updateAdapter = UpdatesAdapter()
+        loadMissedUpdates(savedPreferences.username)
+        horizontalRecycleView.adapter = updateAdapter
+
     }
     private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
@@ -356,5 +354,59 @@ class MainActivity : AppCompatActivity(), OnClickListener{
                 postButton.setTextColor(Color.BLACK)
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadMissedUpdates(username: String) {
+
+        val currentDate: LocalDateTime = LocalDateTime.now()
+        val startingFrom: LocalDateTime = currentDate.minusDays(2)
+        val request = UpdatesRequest(username, startingFrom.toString())
+        Log.d("missed activity", "$username $startingFrom")
+
+        PostApi().getMissedActivity(request)
+            .enqueue(object : Callback<Update> {
+                override fun onFailure(call: Call<Update>, t: Throwable) {
+                    Log.d("missed updates", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<Update>,
+                    response: Response<Update>
+                ) {
+                    if(response.isSuccessful) {
+                        Log.d("missed updates", "api call successful")
+                        val updatesCollection = response.body()!!
+                        Log.d("missed updates", updatesCollection.comments.size.toString())
+                        updateAdapter.setUpdates(updatesCollection.comments, username)
+
+                    }
+                }
+            })
+    }
+
+    private fun retrieveUpdatesFromAPI(request: UpdatesRequest) : ArrayList<CommentUpdate> {
+
+        var updatesCollection = ArrayList<CommentUpdate>()
+
+        PostApi().getMissedActivity(request)
+            .enqueue(object : Callback<Update> {
+                override fun onFailure(call: Call<Update>, t: Throwable) {
+                    Log.d("missed updates", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<Update>,
+                    response: Response<Update>
+                ) {
+                    if(response.isSuccessful) {
+                        Log.d("missed updates", "api call successful")
+                        updatesCollection = response.body()!!.comments
+                        Log.d("missed updates", updatesCollection.size.toString())
+                    }
+                }
+            })
+        Log.d("missed updates", updatesCollection.toString())
+        return updatesCollection
     }
 }
