@@ -78,6 +78,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
     fun setComments(comment: Comment){
         name.text = comment.username
+
         if (comment.datePosted?.length!! > 18) {
             val dateFromBackend = comment.datePosted.substring(0, 10)
             val timeFromBackend = comment.datePosted.substring(11, 19)
@@ -110,6 +111,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
     fun setPost(post: Post) {
         username.text = if (post.anonymous!!) "Anonymous" else post.username
+
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)
             val timeFromBackend = post.datePosted.substring(11, 19)
@@ -258,25 +260,30 @@ private fun getDateAndTime(dateIn: String, timeIn: String): String {
     val currDate = getDateTime().substring(0, 10)
     val currTime = getDateTime().substring(11, 19)
 
-    val objtime = "${militaryToStandardTime(timeIn)}    $dateIn"
+    val days = getDiffDays(dateIn, currDate)
 
     if ( (dateIn == currDate) && (currTime.substring(0, 5) == timeIn.substring(0, 5)) ) {
         return "Just now" // Same minute
     }
     else if ( (dateIn == currDate) && (currTime.substring(0, 2) == timeIn.substring(0, 2)) ) {
-        return "${currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()} min ago"  // Same hour
+        val minutes = currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()
+        return "${minutes}m ago" // Same hour
     }
     else if (dateIn == currDate) {
         println("currTime: $currTime")
         println("timeIn: $timeIn")
         println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
         println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
-        return "${currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()} hr ago"  // Same day
+        val hours = currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()
+        return "${hours}h ago" // Same day
     }
-    else if ( (dateIn.substring(0,7) == currDate.substring(0,7)) && ((currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()) < 7) ) {
-        return "${currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()} days ago" // Same Week
+    else if (days < 7) {
+        return "${days}d ago" // Same Week
     }
-    return objtime
+    else if (days/7 < 5) {
+        return "${days/7}w ago" // Same month
+    }
+    return dateIn
 }
 
 private fun militaryToStandardTime(military_time: String): String {
