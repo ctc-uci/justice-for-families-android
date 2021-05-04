@@ -1,5 +1,6 @@
 package com.example.justice4families
 
+//import androidx.constraintlayout.utils.widget.ImageFilterButton
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -8,27 +9,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-//import androidx.constraintlayout.utils.widget.ImageFilterButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
 import com.example.justice4families.model.Like
 import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
-class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ViewPostAdapter(val context: Context, val comment_textfield: EditText): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -37,7 +37,7 @@ class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
                 //postViewHolder(context, itemView, bottomSheetBehavior)
-                postViewHolder(context, itemView)
+                postViewHolder(context, itemView, comment_textfield)
             }
             else -> {
                 val itemView = inflater.inflate(R.layout.comment_card, parent, false)
@@ -94,7 +94,9 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+class postViewHolder(val context: Context, itemView: View, val comment_textfield: EditText?): RecyclerView.ViewHolder(
+    itemView
+){
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val tags: TextView = itemView.findViewById(R.id.post_tags)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
@@ -158,7 +160,10 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
             grayThumb.visibility = View.VISIBLE
         }
 
-        commentCount.text = String.format(context.resources.getString(R.string.num_comments), post.numComments)
+        commentCount.text = String.format(
+            context.resources.getString(R.string.num_comments),
+            post.numComments
+        )
 
         if(context is ViewPostActivity) actionBar.visibility = View.VISIBLE
 
@@ -186,6 +191,7 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
         //fix this later
         comment.setOnClickListener {
             //bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            comment_textfield?.requestFocus()
         }
 
         if(context !is UserProfileActivity){
@@ -207,7 +213,7 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
 
     private fun likePost(postId: String, username: String){
         PostApi().likePost(Like(postId = postId, username = username))
-            .enqueue(object : Callback<ResponseBody>{
+            .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                 }
@@ -216,7 +222,7 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if(response.isSuccessful) Log.d("api_call", "$username liked $postId")
+                    if (response.isSuccessful) Log.d("api_call", "$username liked $postId")
                 }
 
             })
@@ -272,9 +278,12 @@ private fun getDateAndTime(dateIn: String, timeIn: String): String {
         println("timeIn: $timeIn")
         println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
         println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
-        return "${currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()} hr ago"  // Same day
+        return "${currTime.substring(0, 2).toInt() - timeIn.substring(0, 2).toInt()} hr ago"  // Same day
     }
-    else if ( (dateIn.substring(0,7) == currDate.substring(0,7)) && ((currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()) < 7) ) {
+    else if ( (dateIn.substring(0, 7) == currDate.substring(0, 7)) && ((currDate.substring(8, 10).toInt() - dateIn.substring(
+            8,
+            10
+        ).toInt()) < 7) ) {
         return "${currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()} days ago" // Same Week
     }
     return objtime
