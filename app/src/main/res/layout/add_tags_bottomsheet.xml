@@ -13,7 +13,6 @@
     app:behavior_hideable="true"
     android:background="@drawable/black_bar_border">
 
-
 <!--    placeholders for actual text fields-->
     <RelativeLayout
         android:id="@+id/add_tags_layout"
@@ -46,122 +45,177 @@
 
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/tag_search"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_margins"
+        android:orientation="vertical">
 
+        <View
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="?android:attr/listDivider" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/tag_searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/solitude"
+            android:queryHint="Search tags" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selected_tags_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_margins"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="@dimen/app_margins" />
 
         <TextView
-            android:id="@+id/tag1"
+            android:id="@+id/currently_selected_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:text="#community"
-            android:clickable="true"
-            android:gravity="center"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.101"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.703" />
+            android:text="@string/selected_tags_section_title"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="15sp"
+            android:textColor="@color/navy"
+            android:layout_marginVertical="14dp" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:flexWrap="wrap"
+            app:alignItems="flex_start"
+            app:alignContent="flex_start"
+            app:justifyContent="flex_start" >
+
+            <include android:id="@+id/selected_tag1"
+                layout="@layout/tag_button"
+                android:visibility="invisible"
+                android:layout_marginEnd="12dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <include android:id="@+id/selected_tag2"
+                layout="@layout/tag_button"
+                android:visibility="invisible"
+                android:layout_marginEnd="12dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_margins"
+        android:orientation="vertical">
+
+        <View
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="@dimen/app_margins" />
 
         <TextView
-            android:id="@+id/tag2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:clickable="true"
-            android:text="#j4f"
-            android:gravity="center"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.696" />
+            android:text="popular"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/navy"
+            android:layout_marginVertical="14dp" />
 
-        <TextView
-            android:id="@+id/tag3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:clickable="true"
-            android:text="#queens"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.885"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.696" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="12dp">
 
-        <TextView
-            android:id="@+id/tag4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:text="#resources"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.101"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.266" />
+            <include
+                android:id="@+id/tag1"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tag2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tag4"
+                app:layout_constraintVertical_bias="0.2" />
 
-        <TextView
-            android:id="@+id/tag5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:text="#rules"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.914"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.266" />
+            <include
+                android:id="@+id/tag2"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tag3"
+                app:layout_constraintStart_toEndOf="@id/tag1"
+                app:layout_constraintTop_toBottomOf="@id/tag5"
+                app:layout_constraintVertical_bias="0.2" />
 
-        <TextView
-            android:id="@+id/tag6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_color_selector"
-            android:padding="8dp"
-            android:text="#new facilities"
-            android:textColor="@drawable/text_color_selector"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.516"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.272" />
+            <include
+                android:id="@+id/tag3"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tag2"
+                app:layout_constraintTop_toBottomOf="@id/tag6"
+                app:layout_constraintVertical_bias="0.2"/>
 
+            <include
+                android:id="@+id/tag4"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/tag5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.266" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/tag5"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.266" />
 
+            <include
+                android:id="@+id/tag6"
+                layout="@layout/tag_button"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tag5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.266" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
 
