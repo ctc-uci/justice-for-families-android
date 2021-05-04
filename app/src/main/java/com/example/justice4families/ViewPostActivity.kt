@@ -28,7 +28,7 @@ class ViewPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_post)
-        //showSoftKeyboard(comment_text)
+
         //bottomSheetBehavior = BottomSheetBehavior.from(commentBottomSheet)
        // bottomSheetView = layoutInflater.inflate(R.layout.add_comment_bottomsheet, null)
         viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
@@ -61,6 +61,13 @@ class ViewPostActivity : AppCompatActivity() {
                 viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.username,0, post._id, getDateTime()))
                 comment_text.text?.clear() //clears input box
             }
+
+
+        comment_text.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus) showSoftKeyboard();
+        }
+
+    }
 
 
     fun showSoftKeyboard() {
