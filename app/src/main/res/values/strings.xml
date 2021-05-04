@@ -6,20 +6,22 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="welcome_sign"><b><font size="21">Welcome</font></b>,\nSign in to continue!</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="password">Password</string>
+    <string name="password">password</string>
     <string name="login">Login</string>
     <string name="join_now">Join now</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="not_a_member">Not a member?</string>
-    <string name="email">Email</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="email">email</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="name">name</string>
     <string name="sign_up">Sign Up</string>
     <string name="already_a_member">Already a member?</string>
     <string name="pass_req"> Password must contain at least
-       \n  <li>  Eight (8) characters</li>
+       \n \t <li> Eight (8) characters</li>
        \n \t <li> An uppercase character</li>
        \n \t <li> A lowercase character</li>
        \n \t <li> A number</li>
@@ -27,5 +29,13 @@
     <string name="title_activity_user_profile">UserProfileActivity</string>
     <string name="tab_text_1">Posts</string>
     <string name="tab_text_2">Likes</string>
+    <string name="num_shares">0 Shares</string>
+    <string name="num_comments">%1$d Comments</string>
+
+    <string name="create_account"><b>Create an account</b>,\nSign up to get started!</string>
+
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="log_out">Log Out</string>
+    <string name="delete_account">Delete Account</string>
 
 </resources>

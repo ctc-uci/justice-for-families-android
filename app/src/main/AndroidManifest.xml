@@ -12,20 +12,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Justice4Families.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".profile.EditProfileActivity"></activity>
-        <activity
-            android:name=".profile.UserProfileActivity"
-            android:label="@string/title_activity_user_profile" />
-        <activity android:name=".ViewPostActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".ProxyActivity"
+            android:noHistory="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".profile.EditProfileActivity" />
+        <activity
+            android:name=".profile.SettingsActivity"
+            android:label="@string/title_activity_settings"/>
+        <activity
+            android:name=".profile.UserProfileActivity"
+            android:label="@string/title_activity_user_profile" />
+        <activity android:name=".ViewPostActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>

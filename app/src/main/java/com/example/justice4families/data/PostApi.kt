@@ -1,7 +1,6 @@
 package com.example.justice4families.data
 
-import com.example.justice4families.model.Post
-import com.example.justice4families.model.Comment
+import com.example.justice4families.model.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -26,6 +25,15 @@ interface PostApi {
 
     @POST("posts/create")
     fun addPost(@Body postData: Post): Call<ResponseBody>
+
+    @POST("likes/like")
+    fun likePost(@Body postLiked: Like): Call<ResponseBody>
+
+    @POST("likes/unlike")
+    fun unlikePost(@Body postLiked: Like): Call<ResponseBody>
+
+    @POST("activity")
+    fun getMissedActivity(@Body request: UpdatesRequest): Call<Update>
 
     companion object{
         operator fun invoke(): PostApi {

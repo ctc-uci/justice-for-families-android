@@ -2,33 +2,35 @@ package com.example.justice4families.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.justice4families.MainActivity
+import com.example.justice4families.LoginActivity
 import com.example.justice4families.R
-import com.example.justice4families.data.AuthenticationApi
 import com.example.justice4families.savedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.password
-import kotlinx.android.synthetic.main.activity_signup.*
-import kotlinx.android.synthetic.main.activity_signup.view.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
-import kotlinx.android.synthetic.main.activity_view_post.*
 
 class UserProfileActivity : AppCompatActivity() {
-    var userName = savedPreferences.getUserName()
+
+    private lateinit var bottomNav: BottomNavigationView
+    var userName = savedPreferences.username
+    lateinit var settingsMenu : Menu
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+
         val sectionsPagerAdapter =
             SectionsPagerAdapter(
                 this,
@@ -38,25 +40,24 @@ class UserProfileActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-        var loggedInUser = true
+        var loggedInUser = savedPreferences.loggedin
         val editProfileBtn: Button = findViewById(R.id.edit_profile_btn)
         val profileText: TextView = findViewById(R.id.profile_text)
 
-
         if(intent.hasExtra("post_username")){
             userName = intent.getStringExtra("post_username").toString()
-            loggedInUser = false
+            if(userName != savedPreferences.username) loggedInUser = false
         }
 
-        if(!loggedInUser){
+        user_name.text = userName
+
+        if (!loggedInUser) {
             editProfileBtn.visibility = View.GONE
             profileText.visibility = View.GONE
             back_on_profile.visibility = View.VISIBLE
+        } else {
+            setSupportActionBar(profile_toolbar)
         }
-        else{
-            profile_toolbar.inflateMenu(R.menu.menu_items)
-        }
-        user_name.text = userName
 
         back_on_profile.setOnClickListener{
             onBackPressed()
@@ -64,7 +65,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         editProfileBtn.setOnClickListener{
             val intent = Intent(this, EditProfileActivity::class.java)
-            val user = savedPreferences.getUserName()
+            val user = savedPreferences.username
             intent.putExtra("email", user)
 
             //dummy data
@@ -73,5 +74,42 @@ class UserProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        bottomNav = findViewById(R.id.bottom_nav)
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_addpost -> {
+
+                }
+                R.id.ic_profile -> {
+
+                }
+                R.id.ic_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.profile_menu_items, menu)
+        if (menu != null) {
+            settingsMenu = menu
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
     }
 }

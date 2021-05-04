@@ -17,7 +17,7 @@ class PostViewModel : ViewModel(){
     private val items = mutableListOf<Any>()
     private lateinit var post: Post
 
-    private val _postItems:MutableLiveData<List<Any>> = MutableLiveData()
+    private val _postItems: MutableLiveData<List<Any>> = MutableLiveData()
 
 
     fun addComment(comment: Comment){
@@ -50,7 +50,7 @@ class PostViewModel : ViewModel(){
                     call: Call<MutableList<Comment>>,
                     response: Response<MutableList<Comment>>
                 ) {
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         items.add(post)
                         response.body()?.let { comments->
                             for(comment in comments) {
@@ -70,5 +70,5 @@ class PostViewModel : ViewModel(){
         fetchComments(post)
     }
 
-    fun getPost() =_postItems as LiveData<List<Any>>
+    fun getPost() = _postItems as LiveData<List<Any>>
 }
