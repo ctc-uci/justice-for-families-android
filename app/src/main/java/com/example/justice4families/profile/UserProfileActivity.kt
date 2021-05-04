@@ -2,6 +2,9 @@ package com.example.justice4families.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -20,11 +23,14 @@ class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     var userName = savedPreferences.username
+    lateinit var settingsMenu : Menu
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+
         val sectionsPagerAdapter =
             SectionsPagerAdapter(
                 this,
@@ -38,7 +44,6 @@ class UserProfileActivity : AppCompatActivity() {
         val editProfileBtn: Button = findViewById(R.id.edit_profile_btn)
         val profileText: TextView = findViewById(R.id.profile_text)
 
-
         if(intent.hasExtra("post_username")){
             userName = intent.getStringExtra("post_username").toString()
             if(userName != savedPreferences.username) loggedInUser = false
@@ -46,26 +51,13 @@ class UserProfileActivity : AppCompatActivity() {
 
         user_name.text = userName
 
-        if(!loggedInUser){
+        if (!loggedInUser) {
             editProfileBtn.visibility = View.GONE
             profileText.visibility = View.GONE
             back_on_profile.visibility = View.VISIBLE
+        } else {
+            setSupportActionBar(profile_toolbar)
         }
-        else{
-            profile_toolbar.inflateMenu(R.menu.menu_items)
-        }
-
-        profile_toolbar.setOnMenuItemClickListener { item->
-            if(item.itemId == R.id.logout) {
-                savedPreferences.loggedin = false
-                savedPreferences.username = "Anonymous"
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-            }
-            true
-        }
-
-
 
         back_on_profile.setOnClickListener{
             onBackPressed()
@@ -89,4 +81,24 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.profile_menu_items, menu)
+        if (menu != null) {
+            settingsMenu = menu
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
 }

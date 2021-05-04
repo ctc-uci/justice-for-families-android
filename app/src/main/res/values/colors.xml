@@ -14,4 +14,9 @@
     <color name="dark_gray">#585858</color>
     <color name="light_gray">#F0F0F0</color>
     <color name="orange">#FFA500</color>
+    <color name="sky_blue">#E4F3FA</color>
+    <color name="pink">#FBE5E5</color>
+    <color name="red">#F01818</color>
+    <color name="navy">#10536E</color>
+    <color name="solitude">#E8EDF2</color>
 </resources>

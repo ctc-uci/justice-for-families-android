@@ -24,8 +24,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -80,6 +78,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
     fun setComments(comment: Comment){
         name.text = comment.username
+
         if (comment.datePosted?.length!! > 18) {
             val dateFromBackend = comment.datePosted.substring(0, 10)
             val timeFromBackend = comment.datePosted.substring(11, 19)
@@ -95,7 +94,6 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
 class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
     private val username: TextView = itemView.findViewById(R.id.post_username)
-    private val tags: TextView = itemView.findViewById(R.id.post_tags)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
     val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
@@ -110,8 +108,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
     private var likes = 0
     var likeHandler = Handler()
 
-    fun setPost(post: Post){
-        username.text = post.username
+    fun setPost(post: Post) {
+        username.text = if (post.anonymous!!) "Anonymous" else post.username
+
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)
             val timeFromBackend = post.datePosted.substring(11, 19)
@@ -123,7 +122,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
         postContent.text = post.text
         topicHeadline.text = post.title
-        tags.text = setTag(post.tags)
+        setTag(itemView, post.tags)
         likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
 
@@ -179,7 +178,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
                 false
             }
             likeCount.text = likes.toString()
-            post.likes = likes
+            post.numLikes = likes
         }
 
         comment.setOnClickListener {
@@ -238,18 +237,21 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             })
     }
 
-    private fun setTag(tagsList: List<String>?): String {
-        if (tagsList != null) {
-            var tag = tagsList[0]
+    private fun setTag(view: View, tagsList: List<String>?) {
+        val tag1: TextView = view.findViewById(R.id.post_tag1)
+        val tag2: TextView = view.findViewById(R.id.post_tag2)
 
-            if (!tag.startsWith("#")) {
-                tag = "#$tag"
+        if (tagsList != null) {
+            tag1.text = tagsList[0].removePrefix("#")
+
+            if (tagsList.size > 1) {
+                tag2.text = tagsList[1].removePrefix("#")
+            }
+            else {
+                tag2.visibility = View.GONE
             }
 
-            return tag
         }
-
-        return ""
     }
 }
 
@@ -257,21 +259,30 @@ private fun getDateAndTime(dateIn: String, timeIn: String): String {
     val currDate = getDateTime().substring(0, 10)
     val currTime = getDateTime().substring(11, 19)
 
-    val objtime = "${militaryToStandardTime(timeIn)}    $dateIn"
+    val days = getDiffDays(dateIn, currDate)
 
     if ( (dateIn == currDate) && (currTime.substring(0, 5) == timeIn.substring(0, 5)) ) {
         return "Just now" // Same minute
     }
     else if ( (dateIn == currDate) && (currTime.substring(0, 2) == timeIn.substring(0, 2)) ) {
-        return "${currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()} min ago"  // Same hour
+        val minutes = currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()
+        return "${minutes}m ago" // Same hour
     }
     else if (dateIn == currDate) {
-        return "${currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()} hr ago"  // Same day
+        println("currTime: $currTime")
+        println("timeIn: $timeIn")
+        println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
+        println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
+        val hours = currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()
+        return "${hours}h ago" // Same day
     }
-    else if ( (dateIn.substring(0,7) == currDate.substring(0,7)) && ((currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()) < 7) ) {
-        return "${currDate.substring(8, 10).toInt() - dateIn.substring(8, 10).toInt()} days ago" // Same Week
+    else if (days < 7) {
+        return "${days}d ago" // Same Week
     }
-    return objtime
+    else if (days/7 < 5) {
+        return "${days/7}w ago" // Same month
+    }
+    return dateIn
 }
 
 private fun militaryToStandardTime(military_time: String): String {

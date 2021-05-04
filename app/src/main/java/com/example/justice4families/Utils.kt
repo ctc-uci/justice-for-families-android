@@ -2,12 +2,12 @@ package com.example.justice4families
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import java.text.SimpleDateFormat
-import java.util.*
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 fun getDateTime(): String{
@@ -15,6 +15,15 @@ fun getDateTime(): String{
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     return current.format(formatter)
+}
+
+fun getDiffDays(start: String, end: String): Int {
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    val startDate: Date = sdf.parse(start)
+    val endDate: Date = sdf.parse(end)
+
+    var diff = endDate.time - startDate.time
+    return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)).toInt()
 }
 
 object savedPreferences{
