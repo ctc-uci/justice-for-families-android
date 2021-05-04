@@ -23,7 +23,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         val backButton: Button = findViewById(R.id.edit_profile_back)
 
-        val saveButton: Button = findViewById(R.id.saveProfileInfo)
+        val saveButton: Button = findViewById(R.id.save_profile_edit)
         var saveClicked: Boolean = false
 
         saveButton.setOnClickListener{
@@ -55,12 +55,12 @@ class EditProfileActivity : AppCompatActivity() {
         var password = data.getStringExtra("password")
 
 
-        var profileEmail : EditText = findViewById(R.id.profileEmailAddress)
-        var profilePass : EditText = findViewById(R.id.profilePassword)
+        var profileEmail : EditText = findViewById(R.id.edit_email_text_field)
+        var profilePass : EditText = findViewById(R.id.edit_password_text_field)
 
         var profileImage : de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.edit_profile_pic)
         profileImage.setOnClickListener{
-            Log.d("TAG", "CLicked")
+            Log.d("Edit Profile", "Clicked")
         }
 
         profileEmail.setText(email)
