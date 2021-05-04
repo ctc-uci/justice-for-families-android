@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -45,10 +47,20 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
     var page = 1
     var isLoading = false
-    val limit = 10
+    private val numMaxTags = 2
     var anonymous = false
-    var isPressed: Array<Boolean> = Array(6) {false}
+    private val popularTagsList: Array<String> = arrayOf(
+        "community",
+        "covid19",
+        "health",
+        "resources" ,
+        "new facilities",
+        "rules"
+    )
+    var popularTagIsPressed: MutableMap<String, Boolean> = mutableMapOf()
     private var tagsList: ArrayList<String> = ArrayList()
+    private var popularTags: ArrayList<TextView> = ArrayList()
+    private var selectedTags: ArrayList<TextView> = ArrayList()
     lateinit var postAdapter: PostsAdapter
     lateinit var layoutManager : LinearLayoutManager
     lateinit var updateAdapter: UpdatesAdapter
@@ -84,8 +96,6 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         sheetBehaviorTags = BottomSheetBehavior.from(bottom_sheet_tags)
 
         bottomNav = findViewById(R.id.bottom_navigation)
-
-
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.ic_addpost -> {
@@ -104,12 +114,29 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             true
         }
 
+        // Tags
+        selectedTags.add(selected_tag1 as TextView)
+        selectedTags.add(selected_tag2 as TextView)
+
+        popularTags.add(tag1 as TextView)
+        popularTags.add(tag2 as TextView)
+        popularTags.add(tag3 as TextView)
+        popularTags.add(tag4 as TextView)
+        popularTags.add(tag5 as TextView)
+        popularTags.add(tag6 as TextView)
+
+        popularTagIsPressed = popularTagsList.map { it to false }.toMap().toMutableMap()
+        initPopularTags(popularTags, popularTagsList)
+
         tag1.setOnClickListener(this)
         tag2.setOnClickListener(this)
         tag3.setOnClickListener(this)
         tag4.setOnClickListener(this)
         tag5.setOnClickListener(this)
         tag6.setOnClickListener(this)
+        selected_tag1.setOnClickListener(this)
+        selected_tag2.setOnClickListener(this)
+        updateSelectedTagsHeader()
 
         add_tags_button.setOnClickListener {
             sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -177,7 +204,23 @@ class MainActivity : AppCompatActivity(), OnClickListener{
             subject.text = ""
             content.text = ""
 
+            // Reset tags
+            tagsList.clear()
+            updateSelectedTagsHeader()
+            selectedTags.forEach {
+                it.isPressed = false
+                it.isInvisible = true
+                it.text = ""
+            }
+            popularTags.forEach {
+                it.isPressed = false
+                it.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
+                it.setTextColor(resources.getColor(R.color.purple_500))
+                popularTagIsPressed[it.text.toString()] = false
+            }
         }
+
+
 
         back_to_post_bottomsheet.setOnClickListener {
             bottom_sheet_tags.visibility = View.INVISIBLE
@@ -236,6 +279,7 @@ class MainActivity : AppCompatActivity(), OnClickListener{
         horizontalRecycleView.adapter = updateAdapter
 
     }
+
     private fun sendPost(username: String, subject: String, content: String, tags: List<String>?, anon: Boolean?)
     {
         Log.d("api_call", "SENT")
@@ -325,35 +369,92 @@ class MainActivity : AppCompatActivity(), OnClickListener{
 
     override fun onClick(p0: View?) {
         when(p0?.id) {
-            R.id.tag1 -> changeTagState(p0 as TextView,0)
-            R.id.tag2 -> changeTagState(p0 as TextView,1)
-            R.id.tag3 -> changeTagState(p0 as TextView,2)
-            R.id.tag4 -> changeTagState(p0 as TextView,3)
-            R.id.tag5 -> changeTagState(p0 as TextView,4)
-            R.id.tag6 -> changeTagState(p0 as TextView,5)
+            R.id.tag1 -> changeTagState(p0 as TextView)
+            R.id.tag2 -> changeTagState(p0 as TextView)
+            R.id.tag3 -> changeTagState(p0 as TextView)
+            R.id.tag4 -> changeTagState(p0 as TextView)
+            R.id.tag5 -> changeTagState(p0 as TextView)
+            R.id.tag6 -> changeTagState(p0 as TextView)
+            R.id.selected_tag1 -> changeTagState(p0 as TextView)
+            R.id.selected_tag2 -> changeTagState(p0 as TextView)
         }
     }
 
-    private fun changeTagState(view:TextView, index:Int){
-        if (!isPressed[index]) {
+    private fun changeTagState(view:TextView) {
+        val tagText = view.text.toString()
+        if (!popularTagIsPressed[tagText]!! && popularTagIsPressed.filterValues { it }.size < numMaxTags) {
             view.background = resources.getDrawable(R.drawable.pressed_tags_rectangle)
             view.setTextColor(resources.getColor(R.color.white))
-            isPressed[index] = true
-            tagsList.add(view.text.toString())
+            view.isPressed = true
+            popularTagIsPressed[tagText] = true
+            tagsList.add(tagText)
+
+            val selected = selectedTags[tagsList.size - 1]
+            selected.text = view.text
+            selected.isPressed = true
+            selected.isVisible = true
+
             if (!(postBodyText.text.isEmpty() || titleText.text.isEmpty())) {
                 postButton.isEnabled = true
-                postButton.setTextColor(Color.parseColor("#19769D"))
+                postButton.setTextColor(resources.getColor(R.color.purple_500))
             }
         } else {
-            view.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
-            view.setTextColor(resources.getColor(R.color.purple_500))
-            isPressed[index] = false
-            tagsList.remove(view.text.toString())
+            if (view in selectedTags) {
+                popularTags.forEach {
+                    if (it.text == tagText) {
+                        it.isPressed = false
+                        it.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
+                        it.setTextColor(resources.getColor(R.color.purple_500))
+                    }
+                }
+            } else {
+                view.background = resources.getDrawable(R.drawable.not_pressed_tags_rectangle)
+                view.setTextColor(resources.getColor(R.color.purple_500))
+                view.isPressed = false
+            }
+
+            selectedTags.forEachIndexed { index, it ->
+                if (it.text == tagText) {
+                    if (index == 0 && !selectedTags[1].isInvisible) {
+                        // Move the second tag to the position of the first
+                        it.text = selectedTags[1].text
+                        it.isPressed = true
+                        it.background = resources.getDrawable(R.drawable.pressed_tags_rectangle)
+                        it.setTextColor(resources.getColor(R.color.white))
+                        selectedTags[1].isPressed = false
+                        selectedTags[1].isInvisible = true
+                        selectedTags[1].text = ""
+                    } else {
+                        it.isPressed = false
+                        it.isInvisible = true
+                        it.text = ""
+                    }
+                }
+            }
+
+            popularTagIsPressed[tagText] = false
+            tagsList.remove(tagText)
+
             if (tagsList.isEmpty()) {
                 postButton.isEnabled = false
                 postButton.setTextColor(Color.BLACK)
             }
         }
+        updateSelectedTagsHeader()
+    }
+
+    private fun initPopularTags(popularTags: ArrayList<TextView>, popularTagsList: Array<String>) {
+        popularTagsList.forEachIndexed { index, text ->
+            try {
+                popularTags[index].text = text
+            } catch (e: IndexOutOfBoundsException) {
+                return
+            }
+        }
+    }
+
+    private fun updateSelectedTagsHeader() {
+        currently_selected_title.text = getString(R.string.selected_tags_section_title, tagsList.size, numMaxTags)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
