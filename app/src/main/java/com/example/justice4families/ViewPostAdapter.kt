@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -36,7 +36,8 @@ class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomShee
         return when(viewType){
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
-                postViewHolder(context, itemView, bottomSheetBehavior)
+                //postViewHolder(context, itemView, bottomSheetBehavior)
+                postViewHolder(context, itemView)
             }
             else -> {
                 val itemView = inflater.inflate(R.layout.comment_card, parent, false)
@@ -93,7 +94,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
+class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val tags: TextView = itemView.findViewById(R.id.post_tags)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
@@ -182,8 +183,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             post.likes = likes
         }
 
+        //fix this later
         comment.setOnClickListener {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            //bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
         if(context !is UserProfileActivity){
