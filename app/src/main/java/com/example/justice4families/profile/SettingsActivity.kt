@@ -16,7 +16,14 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         edit_profile_section.setOnClickListener {
-            // TODO: Link to edit profile screen
+            val intent = Intent(this, EditProfileActivity::class.java)
+            val user = savedPreferences.username
+            intent.putExtra("email", user)
+
+            //dummy data
+            intent.putExtra("password", "Hello123!")
+
+            startActivity(intent)
         }
 
         tags_button.setOnClickListener {
