@@ -3,34 +3,31 @@ package com.example.justice4families
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
 import com.example.justice4families.model.Like
-import com.example.justice4families.model.LikeResponse
 import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
 
 
-class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ViewPostAdapter(val context: Context, val comment_textfield: EditText): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -39,7 +36,7 @@ class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
                 //postViewHolder(context, itemView, bottomSheetBehavior)
-                postViewHolder(context, itemView)
+                postViewHolder(context, itemView, comment_textfield)
             }
             else -> {
                 val itemView = inflater.inflate(R.layout.comment_card, parent, false)
@@ -51,7 +48,6 @@ class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.
     fun setItems(items: List<Any>){
         this.items = items
         notifyDataSetChanged()
-        Log.d("view post adapter", items.toString())
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -60,9 +56,7 @@ class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.
         return viewType
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("view post adapter bind", items[position].toString())
         if(getItemViewType(position) == 0){
             val post : Post = items[position] as Post
             val postViewHolder = holder as postViewHolder
@@ -84,7 +78,6 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     val commentText: TextView = itemView.findViewById(R.id.post_content)
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun setComments(comment: Comment){
         name.text = comment.username
 
@@ -101,7 +94,9 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+class postViewHolder(val context: Context, itemView: View, val comment_textfield: EditText?): RecyclerView.ViewHolder(
+    itemView
+){
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
@@ -115,35 +110,10 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
     private val commentCount: TextView = itemView.findViewById(R.id.comment_num)
     private val actionBar: ConstraintLayout = itemView.findViewById(R.id.action_bar)
     private var likes = 0
-    private var likeHandler = Handler()
-    private lateinit var runnable: Runnable
-    private var setup = true
-    private var originalLiked: Boolean by Delegates.observable(false) { property, oldValue, newValue ->
-        currentlyLiked = newValue
-    }
-    private var currentlyLiked: Boolean by Delegates.observable(false) { property, oldValue, liked ->
-        if (!setup){
-            if (liked) {
-                like.setTextColor(context.resources.getColor(R.color.purple_500))
-                grayThumb.visibility = View.INVISIBLE
-                blueThumb.visibility = View.VISIBLE
-                likes += 1
-                startHandler(runnable)
-            } else {
-                like.setTextColor(context.resources.getColor(R.color.gray))
-                blueThumb.visibility = View.INVISIBLE
-                grayThumb.visibility = View.VISIBLE
-                likes -= 1
-                startHandler(runnable)
-            }
-        }
-        Log.d("likes observable", "$liked $likes")
-    }
+    var likeHandler = Handler()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun setPost(post: Post) {
         username.text = if (post.anonymous!!) "Anonymous" else post.username
-        checkUserLiked(post, savedPreferences.username)
 
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)
@@ -160,13 +130,11 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
         likes = post.numLikes ?: 0
         likeCount.text = likes.toString()
 
-        like.setTextColor(context.resources.getColor(R.color.gray))
-        like.setTypeface(null, Typeface.BOLD)
-        blueThumb.visibility = View.INVISIBLE
-        grayThumb.visibility = View.VISIBLE
+        var originalLiked = false // TODO: get from list of user's liked posts
+        var postLiked = originalLiked
 
-        runnable = Runnable {
-            if (currentlyLiked != originalLiked) {
+        val runnable = Runnable {
+            if (postLiked != originalLiked) {
                 originalLiked = if (originalLiked) {
                     unlikePost(post._id!!, savedPreferences.username)
                     Log.d("runnable", "post like was changed, post originally liked")
@@ -177,16 +145,50 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
                     Log.d("runnable", "post like was changed, post NOT originally liked")
                     true
                 }
-                setup = true
             }
+        }
+
+        if (originalLiked){
+            like.setTextColor(context.resources.getColor(R.color.purple_500))
+            like.setTypeface(null, Typeface.BOLD)
+            grayThumb.visibility = View.INVISIBLE
+            blueThumb.visibility = View.VISIBLE
+        }
+        else {
+            like.setTextColor(context.resources.getColor(R.color.gray))
+            blueThumb.visibility = View.INVISIBLE
+            grayThumb.visibility = View.VISIBLE
         }
 
         commentCount.text = String.format(context.resources.getString(R.string.num_comments), post.numComments)
 
         if(context is ViewPostActivity) actionBar.visibility = View.VISIBLE
 
+        like.setOnClickListener {
+            postLiked = if(!postLiked){
+                like.setTextColor(context.resources.getColor(R.color.purple_500))
+                like.setTypeface(null, Typeface.BOLD)
+                grayThumb.visibility = View.INVISIBLE
+                blueThumb.visibility = View.VISIBLE
+                likes += 1
+                startHandler(runnable)
+                true
+            } else{
+                like.setTextColor(context.resources.getColor(R.color.gray))
+                blueThumb.visibility = View.INVISIBLE
+                grayThumb.visibility = View.VISIBLE
+                likes -= 1
+                startHandler(runnable)
+                false
+            }
+            likeCount.text = likes.toString()
+            post.numLikes = likes
+        }
+
+        //fix this later
         comment.setOnClickListener {
             //bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            comment_textfield?.requestFocus()
         }
 
         if(context !is UserProfileActivity){
@@ -204,38 +206,6 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
         likeHandler.removeCallbacks(runnable)
         Log.d("runnable", "runnable starting")
         likeHandler.postDelayed(runnable, 2000)
-    }
-
-    private fun checkUserLiked(post: Post, username: String) {
-        PostApi().hasUserLiked(post._id!!, username)
-            .enqueue(object: Callback<LikeResponse> {
-                override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
-                    Log.d("likes", t.message.toString())
-                }
-
-                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
-                    if (response.isSuccessful) {
-                        Log.d("likes", response.body().toString())
-                        originalLiked = response.body()!!.hasLiked!!
-                        setup = false
-                        Log.d("likes in response", originalLiked.toString())
-                        if (originalLiked){
-                            like.setTextColor(context.resources.getColor(R.color.purple_500))
-                            grayThumb.visibility = View.INVISIBLE
-                            blueThumb.visibility = View.VISIBLE
-                        }
-                        handleLikeListener(post)
-                    }
-                }
-            })
-    }
-
-    private fun handleLikeListener(post: Post) {
-        like.setOnClickListener {
-            currentlyLiked = !currentlyLiked
-            likeCount.text = likes.toString()
-            post.numLikes = likes
-        }
     }
 
     private fun likePost(postId: String, username: String){
@@ -260,6 +230,7 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
         PostApi().unlikePost(Like(postId = postId, username = username))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
                 }
 
                 override fun onResponse(
@@ -288,4 +259,50 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
 
         }
     }
+}
+
+private fun getDateAndTime(dateIn: String, timeIn: String): String {
+    val currDate = getDateTime().substring(0, 10)
+    val currTime = getDateTime().substring(11, 19)
+
+    val days = getDiffDays(dateIn, currDate)
+
+    if ( (dateIn == currDate) && (currTime.substring(0, 5) == timeIn.substring(0, 5)) ) {
+        return "Just now" // Same minute
+    }
+    else if ( (dateIn == currDate) && (currTime.substring(0, 2) == timeIn.substring(0, 2)) ) {
+        val minutes = currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()
+        return "${minutes}m ago" // Same hour
+    }
+    else if (dateIn == currDate) {
+        println("currTime: $currTime")
+        println("timeIn: $timeIn")
+        println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
+        println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
+        val hours = currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()
+        return "${hours}h ago" // Same day
+    }
+    else if (days < 7) {
+        return "${days}d ago" // Same Week
+    }
+    else if (days/7 < 5) {
+        return "${days/7}w ago" // Same month
+    }
+    return dateIn
+}
+
+private fun militaryToStandardTime(military_time: String): String {
+    var hours = military_time.substring(0, 2)
+    var min_sec = military_time.substring(2, 8)
+    if (hours.toInt() == 0) {
+        return "12$min_sec AM"
+    }
+    else if (hours.toInt() == 12) {
+        return "12$min_sec PM"
+    }
+    else if (hours.toInt() > 12) {
+        hours = (hours.toInt() - 12).toString()
+        return "$hours$min_sec PM"
+    }
+    return "$military_time AM"
 }

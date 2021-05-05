@@ -17,7 +17,7 @@ class PostsAdapter(val context: Context) : RecyclerView.Adapter<postViewHolder>(
     // Return the ViewHolder object
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): postViewHolder{
         val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
-        return postViewHolder(context, itemView)
+        return postViewHolder(context, itemView, null)
     }
 
     override fun getItemCount(): Int {
