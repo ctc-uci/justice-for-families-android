@@ -46,7 +46,7 @@ class PostsFragment : Fragment() {
         adapter = PostsAdapter(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(requireContext())
-        userName = (activity as UserProfileActivity).userName
+        userName = (activity as UserProfileActivity).username
 
         getUserPost()
     }
