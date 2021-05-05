@@ -35,6 +35,9 @@ interface PostApi {
     @POST("activity")
     fun getMissedActivity(@Body request: UpdatesRequest): Call<Update>
 
+    @GET("tags")
+    fun getAllTags(): Call<MutableList<String>>
+
     companion object{
         operator fun invoke(): PostApi {
             return Retrofit.Builder().baseUrl("https://j4f-backend.herokuapp.com/")
