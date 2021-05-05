@@ -20,6 +20,9 @@ interface PostApi {
     @GET("comments/post/{postId}")
     fun getComments(@Path("postId") postId: String): Call<MutableList<Comment>>
 
+    @POST("posts/id")
+    fun getPostById(@Body postRequest: PostRequest): Call<Post>
+
     @POST("comments/{postId}/comments/create")
     fun postComment(@Path("postId") postId:String, @Body comment: Comment): Call<ResponseBody>
 
