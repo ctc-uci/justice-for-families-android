@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Post
 
@@ -15,7 +17,7 @@ class PostsAdapter(val context: Context) : RecyclerView.Adapter<postViewHolder>(
     // Return the ViewHolder object
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): postViewHolder{
         val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
-        return postViewHolder(context, itemView)
+        return postViewHolder(context, itemView, null)
     }
 
     override fun getItemCount(): Int {

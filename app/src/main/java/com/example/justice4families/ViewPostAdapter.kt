@@ -8,17 +8,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-//import androidx.constraintlayout.utils.widget.ImageFilterButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
 import com.example.justice4families.model.Like
 import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -26,7 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ViewPostAdapter(val context: Context, val comment_textfield: EditText): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -35,7 +36,7 @@ class ViewPostAdapter (val context: Context): RecyclerView.Adapter<RecyclerView.
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
                 //postViewHolder(context, itemView, bottomSheetBehavior)
-                postViewHolder(context, itemView)
+                postViewHolder(context, itemView, comment_textfield)
             }
             else -> {
                 val itemView = inflater.inflate(R.layout.comment_card, parent, false)
@@ -93,7 +94,9 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+class postViewHolder(val context: Context, itemView: View, val comment_textfield: EditText?): RecyclerView.ViewHolder(
+    itemView
+){
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
@@ -185,6 +188,7 @@ class postViewHolder(val context: Context, itemView: View): RecyclerView.ViewHol
         //fix this later
         comment.setOnClickListener {
             //bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            comment_textfield?.requestFocus()
         }
 
         if(context !is UserProfileActivity){
