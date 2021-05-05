@@ -2,6 +2,9 @@ package com.example.justice4families
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import android.preference.PreferenceManager
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -9,7 +12,54 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun getDateAndTime(dateIn: String, timeIn: String): String {
+    val currDate = getDateTime().substring(0, 10)
+    val currTime = getDateTime().substring(11, 19)
 
+    val days = getDiffDays(dateIn, currDate)
+
+    if ( (dateIn == currDate) && (currTime.substring(0, 5) == timeIn.substring(0, 5)) ) {
+        return "Just now" // Same minute
+    }
+    else if ( (dateIn == currDate) && (currTime.substring(0, 2) == timeIn.substring(0, 2)) ) {
+        val minutes = currTime.substring(3, 5).toInt() - timeIn.substring(3, 5).toInt()
+        return "${minutes}m ago" // Same hour
+    }
+    else if (dateIn == currDate) {
+        println("currTime: $currTime")
+        println("timeIn: $timeIn")
+        println("currTime hour for same day: ${currTime.substring(0, 2).toInt()}")
+        println("timeIn hour for same day: ${timeIn.substring(0, 2).toInt()}")
+        val hours = currTime.substring(0,2).toInt() - timeIn.substring(0,2).toInt()
+        return "${hours}h ago" // Same day
+    }
+    else if (days < 7) {
+        return "${days}d ago" // Same Week
+    }
+    else if (days/7 < 5) {
+        return "${days/7}w ago" // Same month
+    }
+    return dateIn
+}
+
+private fun militaryToStandardTime(military_time: String): String {
+    var hours = military_time.substring(0, 2)
+    var min_sec = military_time.substring(2, 8)
+    if (hours.toInt() == 0) {
+        return "12$min_sec AM"
+    }
+    else if (hours.toInt() == 12) {
+        return "12$min_sec PM"
+    }
+    else if (hours.toInt() > 12) {
+        hours = (hours.toInt() - 12).toString()
+        return "$hours$min_sec PM"
+    }
+    return "$military_time AM"
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 fun getDateTime(): String{
     val current = LocalDateTime.now(ZoneId.of("GMT"))
 

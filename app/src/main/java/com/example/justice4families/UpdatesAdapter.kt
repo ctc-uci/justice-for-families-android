@@ -1,32 +1,61 @@
 package com.example.justice4families
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.CommentUpdate
+import com.example.justice4families.model.Post
+import com.example.justice4families.model.PostRequest
+import com.example.justice4families.model.Update
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class UpdatesAdapter():RecyclerView.Adapter<UpdatesAdapter.UpdatesViewHolder>() {
+class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.UpdatesViewHolder>() {
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var items = ArrayList<CommentUpdate>()
+    private var post : Post? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpdatesViewHolder {
-        Log.d("missed updates", items.toString())
-        return UpdatesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.missed_message_card, parent, false)
-        )
+        val itemView = inflater.inflate(R.layout.missed_message_card, parent, false)
+        return UpdatesViewHolder(itemView)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: UpdatesViewHolder, position: Int) {
-        var text = items[position].commentUsername
+        val commentUpdate = items[position]
+        var text = commentUpdate.commentUsername
 
-        if (items[position].postID != null) {
+        if (commentUpdate.postID != null) {
             text += " commented on your post!"
-            holder.updateTime.text = items[position].commentDatePosted
+
+            getPost(commentUpdate.postID)
+
+            holder.itemView.setOnClickListener{
+                val intent = Intent(context, ViewPostActivity::class.java)
+                intent.putExtra("post", post)
+                context.startActivity(intent)
+            }
         }
 
         holder.tvUpdateMsg.text = text
+
+        if (commentUpdate.commentDatePosted != null) {
+            val dateFromBackend = commentUpdate.commentDatePosted!!.substring(0, 10)
+            val timeFromBackend = commentUpdate.commentDatePosted.substring(11, 19)
+            holder.updateTime.text = getDateAndTime(dateFromBackend, timeFromBackend)
+        }
+        else {
+            holder.updateTime.text = ""
+        }
     }
 
     override fun getItemCount(): Int {
@@ -45,8 +74,31 @@ class UpdatesAdapter():RecyclerView.Adapter<UpdatesAdapter.UpdatesViewHolder>() 
 
         val filteredItems = items.filter { it.commentUsername != username }
         this.items = filteredItems as ArrayList<CommentUpdate>
-
         notifyDataSetChanged()
+    }
+
+    private fun getPost(postId: String) {
+        PostApi().getPostById(PostRequest(postId))
+            .enqueue(object : Callback<Post> {
+                override fun onFailure(call: Call<Post>, t: Throwable) {
+                    Log.d("missed updates post", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<Post>,
+                    response: Response<Post>
+                ) {
+                    if(response.isSuccessful) {
+                        Log.d("missed updates post", "api call successful")
+                        post = response.body()!!
+                        Log.d("missed updates post api", post.toString())
+
+                    }
+                    else {
+                        Log.d("missed updates post", "api unsuccessful")
+                    }
+                }
+            })
     }
 
 }

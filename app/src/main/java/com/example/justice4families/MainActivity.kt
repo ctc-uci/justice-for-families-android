@@ -323,7 +323,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         horizontalRecycleView.setHasFixedSize(true)
         horizontalRecycleView.setItemViewCacheSize(20)
         horizontalRecycleView.layoutManager = horizontalLayoutManager
-        updateAdapter = UpdatesAdapter()
+        updateAdapter = UpdatesAdapter(this)
         loadMissedUpdates(savedPreferences.username)
         horizontalRecycleView.adapter = updateAdapter
     }
@@ -630,30 +630,5 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                     }
                 }
             })
-    }
-
-    private fun retrieveUpdatesFromAPI(request: UpdatesRequest): ArrayList<CommentUpdate> {
-
-        var updatesCollection = ArrayList<CommentUpdate>()
-
-        PostApi().getMissedActivity(request)
-            .enqueue(object : Callback<Update> {
-                override fun onFailure(call: Call<Update>, t: Throwable) {
-                    Log.d("missed updates", t.message.toString())
-                }
-
-                override fun onResponse(
-                    call: Call<Update>,
-                    response: Response<Update>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("missed updates", "api call successful")
-                        updatesCollection = response.body()!!.comments
-                        Log.d("missed updates", updatesCollection.size.toString())
-                    }
-                }
-            })
-        Log.d("missed updates", updatesCollection.toString())
-        return updatesCollection
     }
 }
