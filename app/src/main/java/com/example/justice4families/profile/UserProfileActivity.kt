@@ -7,13 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.justice4families.MainActivity
-import com.example.justice4families.LoginActivity
 import com.example.justice4families.R
 import com.example.justice4families.savedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,9 +20,8 @@ import kotlinx.android.synthetic.main.activity_user_profile.*
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
-    var userName = savedPreferences.username
-    lateinit var settingsMenu : Menu
-
+    var username = savedPreferences.username
+    lateinit var settingsMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -45,11 +42,11 @@ class UserProfileActivity : AppCompatActivity() {
         val profileText: TextView = findViewById(R.id.profile_text)
 
         if(intent.hasExtra("post_username")){
-            userName = intent.getStringExtra("post_username").toString()
-            if(userName != savedPreferences.username) loggedInUser = false
+            username = intent.getStringExtra("post_username").toString()
+            if(username != savedPreferences.username) loggedInUser = false
         }
 
-        user_name.text = userName
+        user_name.text = username
 
         if (!loggedInUser) {
             editProfileBtn.visibility = View.GONE
@@ -63,6 +60,17 @@ class UserProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        editProfileBtn.setOnClickListener{
+            val intent = Intent(this, EditProfileActivity::class.java)
+            val user = savedPreferences.username
+            intent.putExtra("email", user)
+
+            //dummy data
+            intent.putExtra("password", "Hello123!")
+
+            startActivity(intent)
+        }
+
         bottomNav = findViewById(R.id.bottom_nav)
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -70,7 +78,10 @@ class UserProfileActivity : AppCompatActivity() {
 
                 }
                 R.id.ic_profile -> {
-
+                    if (!loggedInUser) {
+                        val intent = Intent(this, UserProfileActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 R.id.ic_home -> {
                     val intent = Intent(this, MainActivity::class.java)

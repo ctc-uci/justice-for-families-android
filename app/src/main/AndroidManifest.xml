@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".profile.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"/>
+        <activity
             android:name=".profile.SettingsActivity"
             android:label="@string/title_activity_settings"/>
         <activity
