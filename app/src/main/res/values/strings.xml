@@ -38,9 +38,13 @@
     <string name="log_out">Log Out</string>
     <string name="delete_account">Delete Account</string>
     <string name="selected_tags_section_title">currently selected (%d of %d)</string>
+
     <string name="password_capitalized">Password</string>
     <string name="full_name">Full Name</string>
 
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+
+    <string name="dne_tag_title">\'%1$s\' doesn\'t exist. Create a tag?</string>
+    <string name="dne_tag">+ %1$s</string>
 
 </resources>
