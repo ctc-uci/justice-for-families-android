@@ -1,6 +1,9 @@
 package com.example.justice4families.profile
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,10 +16,16 @@ import androidx.appcompat.app.AlertDialog
 import com.example.justice4families.R
 
 class EditProfileActivity : AppCompatActivity() {
+    companion object {
+        private val IMAGE_PICK_CODE = 1
+    }
+
     var didSaveEdits = true
     lateinit var profileName: EditText
     lateinit var profileEmail: EditText
     lateinit var profilePwd: EditText
+    lateinit var profileImageView : de.hdodenhof.circleimageview.CircleImageView
+    private var selectedImgUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +58,9 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        val data = intent
         var fullname: String = ""
-        var email = data.getStringExtra("email")
-        var password = data.getStringExtra("password")
+        var email = intent.getStringExtra("email")
+        var password = intent.getStringExtra("password")
 
         profileName = findViewById(R.id.edit_name_text_field)
         profileName.addTextChangedListener(object: TextWatcher {
@@ -100,13 +108,46 @@ class EditProfileActivity : AppCompatActivity() {
             }
         })
 
-        val profileImage : de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.edit_profile_pic)
-        profileImage.setOnClickListener{
-            Log.i("Edit Profile", "Clicked profile image circle")
+        profileImageView = findViewById(R.id.edit_profile_pic)
+        profileImageView.setOnClickListener {
+            pickImageFromGallery()
+        }
+
+        val editPicBtn: TextView = findViewById(R.id.edit_profile_pic_btn)
+        editPicBtn.setOnClickListener {
+            pickImageFromGallery()
         }
 
         profileName.setText(fullname)
         profileEmail.setText(email)
         profilePwd.setText(password)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_PICK_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    selectedImgUri = data.data
+                    Log.i("Edit Profile", selectedImgUri.toString())
+                    profileImageView.setImageURI(selectedImgUri)
+                    didSaveEdits = false
+                } else {
+                    Log.i("Edit Profile", "Data returned is null")
+                }
+            } else {
+                Log.i("Edit Profile", "User did not select image")
+            }
+        }
+    }
+
+    private fun pickImageFromGallery() {
+        Log.i("Edit Profile", "User opened image gallery")
+        val galleryIntent = Intent(
+            Intent.ACTION_GET_CONTENT,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, IMAGE_PICK_CODE)
     }
 }
