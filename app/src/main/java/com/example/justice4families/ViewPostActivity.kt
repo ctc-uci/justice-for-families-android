@@ -23,14 +23,9 @@ class ViewPostActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ViewPostAdapter
     private lateinit var viewModel: PostViewModel
-    //private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-    //private lateinit var bottomSheetView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_post)
-
-        //bottomSheetBehavior = BottomSheetBehavior.from(commentBottomSheet)
-       // bottomSheetView = layoutInflater.inflate(R.layout.add_comment_bottomsheet, null)
         viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
 
 
@@ -54,13 +49,14 @@ class ViewPostActivity : AppCompatActivity() {
         )
 
         comment_button.setOnClickListener {
-            //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             //save comment associated with this post
             if(comment_text.text.toString().isNotEmpty())
             {
                 viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.username,0, post._id, getDateTime()))
                 comment_text.text?.clear() //clears input box
             }
+
+        }
 
 
         comment_text.setOnFocusChangeListener { _, hasFocus ->

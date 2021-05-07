@@ -108,7 +108,4 @@
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--<include layout="@layout/add_comment_bottomsheet"/>-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
