@@ -2,6 +2,7 @@ package com.example.justice4families
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +28,7 @@ class ViewPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_post)
-
+        //showSoftKeyboard(comment_text)
         //bottomSheetBehavior = BottomSheetBehavior.from(commentBottomSheet)
        // bottomSheetView = layoutInflater.inflate(R.layout.add_comment_bottomsheet, null)
         viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
@@ -38,7 +39,7 @@ class ViewPostActivity : AppCompatActivity() {
         }
 
         recyclerView= findViewById(R.id.view_post_recycler)
-        adapter = ViewPostAdapter(this)
+        adapter = ViewPostAdapter(this, comment_text)
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(this)
 
@@ -62,6 +63,8 @@ class ViewPostActivity : AppCompatActivity() {
             }
 
         }
+
+
 
 //        bottomSheetBehavior.addBottomSheetCallback(object :
 //            BottomSheetBehavior.BottomSheetCallback() {
@@ -96,8 +99,17 @@ class ViewPostActivity : AppCompatActivity() {
 //            else bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 //        }
 
+        comment_text.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus) showSoftKeyboard();
+        }
+
+    }
 
 
+    fun showSoftKeyboard() {
+        val imm: InputMethodManager? =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(comment_text ,InputMethodManager.SHOW_IMPLICIT);
     }
 }
 
