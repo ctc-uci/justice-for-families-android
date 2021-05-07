@@ -23,14 +23,9 @@ class ViewPostActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ViewPostAdapter
     private lateinit var viewModel: PostViewModel
-    //private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-    //private lateinit var bottomSheetView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_post)
-        //showSoftKeyboard(comment_text)
-        //bottomSheetBehavior = BottomSheetBehavior.from(commentBottomSheet)
-       // bottomSheetView = layoutInflater.inflate(R.layout.add_comment_bottomsheet, null)
         viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
 
 
@@ -54,7 +49,6 @@ class ViewPostActivity : AppCompatActivity() {
         )
 
         comment_button.setOnClickListener {
-            //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             //save comment associated with this post
             if(comment_text.text.toString().isNotEmpty())
             {
@@ -64,40 +58,6 @@ class ViewPostActivity : AppCompatActivity() {
 
         }
 
-
-
-//        bottomSheetBehavior.addBottomSheetCallback(object :
-//            BottomSheetBehavior.BottomSheetCallback() {
-//
-//            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//                // handle onSlide
-//            }
-//
-//            override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                when (newState) {
-//                    BottomSheetBehavior.STATE_COLLAPSED -> hidecomment.visibility = View.GONE
-//                    BottomSheetBehavior.STATE_EXPANDED -> {
-//                        hidecomment.visibility = View.VISIBLE
-//                        hidecomment.setOnClickListener{
-//                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//                        }
-//                        comment_button.setOnClickListener {
-//                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//                            //save comment associated with this post
-//                            viewModel.addComment(Comment(null, comment_text.text.toString(),savedPreferences.username,0, post._id, getDateTime()))
-//                            comment_text.text?.clear() //clears input box
-//                        }
-//                    }
-//                    else -> null
-//                }
-//            }
-//        })
-//
-//        val commentText: EditText = bottomSheetView.findViewById<EditText>(R.id.comment_text)
-//        commentText.setOnFocusChangeListener{ _, hasFocus ->
-//            if(hasFocus) bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            else bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//        }
 
         comment_text.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus) showSoftKeyboard();
