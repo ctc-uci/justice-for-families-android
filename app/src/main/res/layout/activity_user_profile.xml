@@ -66,7 +66,7 @@
                 app:layout_constraintVertical_bias="0.714" />
 
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/full_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -79,18 +79,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Los Angeles, CA"
+                android:text="username"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/edit_profile_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.483"
                 app:layout_constraintStart_toEndOf="@+id/profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                app:layout_constraintTop_toBottomOf="@+id/full_name"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
