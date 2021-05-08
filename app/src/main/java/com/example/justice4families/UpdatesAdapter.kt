@@ -32,10 +32,10 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: UpdatesViewHolder, position: Int) {
         val commentUpdate = items[position]
-        var text = commentUpdate.commentUsername
 
         if (commentUpdate.postID != null) {
-            text += " commented on your post!"
+            val text = "@${parseUsername(commentUpdate.commentUsername)} commented on your post!"
+            holder.tvUpdateMsg.text = text
 
             getPost(commentUpdate.postID)
 
@@ -45,8 +45,9 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
                 context.startActivity(intent)
             }
         }
-
-        holder.tvUpdateMsg.text = text
+        else {
+            holder.tvUpdateMsg.text = commentUpdate.commentUsername
+        }
 
         if (commentUpdate.commentDatePosted != null) {
             val dateFromBackend = commentUpdate.commentDatePosted!!.substring(0, 10)
