@@ -87,7 +87,7 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setComments(comment: Comment){
-        name.text = comment.username
+        name.text = parseUsername(comment.username)
 
         if (comment.datePosted?.length!! > 18) {
             val dateFromBackend = comment.datePosted.substring(0, 10)
@@ -145,7 +145,8 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setPost(post: Post) {
-        username.text = if (post.anonymous!!) "Anonymous" else post.username
+        username.text = if (post.anonymous!!) "Anonymous" else parseUsername(post.username)
+        checkUserLiked(post, savedPreferences.username)
 
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)

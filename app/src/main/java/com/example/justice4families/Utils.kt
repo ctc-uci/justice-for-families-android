@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -74,6 +75,16 @@ fun getDiffDays(start: String, end: String): Int {
 
     var diff = endDate.time - startDate.time
     return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)).toInt()
+}
+
+fun parseUsername(username: String?): String {
+    if (username != null) {
+        val index = username.indexOf("@")
+        val shortenName = username.substring(0,index)
+        Log.d("username", shortenName)
+        return shortenName
+    }
+    return ""
 }
 
 object savedPreferences{
