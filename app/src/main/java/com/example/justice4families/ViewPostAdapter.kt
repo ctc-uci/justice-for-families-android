@@ -9,10 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
@@ -20,7 +23,6 @@ import com.example.justice4families.model.Like
 import com.example.justice4families.model.LikeResponse
 import com.example.justice4families.model.Post
 import com.example.justice4families.profile.UserProfileActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -30,7 +32,7 @@ import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
 
 
-class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ViewPostAdapter(val context: Context, val comment_textfield: EditText): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -38,7 +40,8 @@ class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomShee
         return when(viewType){
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
-                postViewHolder(context, itemView, bottomSheetBehavior)
+                //postViewHolder(context, itemView, bottomSheetBehavior)
+                postViewHolder(context, itemView, comment_textfield)
             }
             else -> {
                 val itemView = inflater.inflate(R.layout.comment_card, parent, false)
@@ -50,7 +53,6 @@ class ViewPostAdapter (val context: Context, val bottomSheetBehavior: BottomShee
     fun setItems(items: List<Any>){
         this.items = items
         notifyDataSetChanged()
-        Log.d("view post adapter", items.toString())
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -100,14 +102,16 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>?): RecyclerView.ViewHolder(itemView){
+class postViewHolder(val context: Context, itemView: View, val comment_textfield: EditText?): RecyclerView.ViewHolder(
+    itemView
+) {
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
     val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
     private val topicHeadline: TextView = itemView.findViewById(R.id.topic_headline)
-    private val like:TextView = itemView.findViewById(R.id.like_post)
-    private val comment:TextView = itemView.findViewById(R.id.comment_post)
+    private val like: TextView = itemView.findViewById(R.id.like_post)
+    private val comment: TextView = itemView.findViewById(R.id.comment_post)
     private val blueThumb: ImageView = itemView.findViewById(R.id.blue_thumb)
     private val grayThumb: ImageView = itemView.findViewById(R.id.gray_thumb)
     private val likeCount: TextView = itemView.findViewById(R.id.like_num)
@@ -121,7 +125,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         currentlyLiked = newValue
     }
     private var currentlyLiked: Boolean by Delegates.observable(false) { property, oldValue, liked ->
-        if (!setup){
+        if (!setup) {
             if (liked) {
                 like.setTextColor(context.resources.getColor(R.color.purple_500))
                 grayThumb.visibility = View.INVISIBLE
@@ -148,8 +152,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
             val dateFromBackend = post.datePosted.substring(0, 10)
             val timeFromBackend = post.datePosted.substring(11, 19)
             timeStamp.text = getDateAndTime(dateFromBackend, timeFromBackend)
-        }
-        else {
+        } else {
             timeStamp.text = post.datePosted
         }
 
@@ -182,14 +185,15 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
         commentCount.text = String.format(context.resources.getString(R.string.num_comments), post.numComments)
 
-        if(context is ViewPostActivity) actionBar.visibility = View.VISIBLE
+        if (context is ViewPostActivity) actionBar.visibility = View.VISIBLE
 
+        //fix this later
         comment.setOnClickListener {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            comment_textfield?.requestFocus()
         }
 
-        if(context !is UserProfileActivity){
-            profileImage.setOnClickListener{
+        if (context !is UserProfileActivity) {
+            profileImage.setOnClickListener {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("post_username", post.username)
                 context.startActivity(intent)
@@ -207,18 +211,21 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
     private fun checkUserLiked(post: Post, username: String) {
         PostApi().hasUserLiked(post._id!!, username)
-            .enqueue(object: Callback<LikeResponse> {
+            .enqueue(object : Callback<LikeResponse> {
                 override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
                     Log.d("likes", t.message.toString())
                 }
 
-                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                override fun onResponse(
+                    call: Call<LikeResponse>,
+                    response: Response<LikeResponse>
+                ) {
                     if (response.isSuccessful) {
                         Log.d("likes", response.body().toString())
                         originalLiked = response.body()!!.hasLiked!!
                         setup = false
                         Log.d("likes in response", originalLiked.toString())
-                        if (originalLiked){
+                        if (originalLiked) {
                             like.setTextColor(context.resources.getColor(R.color.purple_500))
                             grayThumb.visibility = View.INVISIBLE
                             blueThumb.visibility = View.VISIBLE
@@ -237,9 +244,9 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
         }
     }
 
-    private fun likePost(postId: String, username: String){
+    private fun likePost(postId: String, username: String) {
         PostApi().likePost(Like(postId = postId, username = username))
-            .enqueue(object : Callback<ResponseBody>{
+            .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 
                 }
@@ -248,7 +255,7 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if(response.isSuccessful) Log.d("api_call", "$username liked $postId")
+                    if (response.isSuccessful) Log.d("api_call", "$username liked $postId")
                 }
 
             })
@@ -280,11 +287,11 @@ class postViewHolder(val context: Context, itemView: View, val bottomSheetBehavi
 
             if (tagsList.size > 1) {
                 tag2.text = tagsList[1].removePrefix("#")
-            }
-            else {
+            } else {
                 tag2.visibility = View.GONE
             }
 
         }
+
     }
 }
