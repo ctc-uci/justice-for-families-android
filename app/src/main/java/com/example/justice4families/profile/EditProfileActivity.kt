@@ -59,8 +59,8 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         var fullname: String = ""
-        var email = intent.getStringExtra("email")
-        var password = intent.getStringExtra("password")
+        var email: String = ""
+        var password: String = ""
 
         profileName = findViewById(R.id.edit_name_text_field)
         profileName.addTextChangedListener(object: TextWatcher {

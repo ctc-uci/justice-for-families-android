@@ -62,12 +62,6 @@ class UserProfileActivity : AppCompatActivity() {
 
         editProfileBtn.setOnClickListener{
             val intent = Intent(this, EditProfileActivity::class.java)
-            val user = savedPreferences.username
-            intent.putExtra("email", user)
-
-            //dummy data
-            intent.putExtra("password", "Hello123!")
-
             startActivity(intent)
         }
 
