@@ -44,6 +44,9 @@ interface PostApi {
     @GET("tags")
     fun getAllTags(): Call<MutableList<String>>
 
+    @POST("/likes/byUser")
+    fun getLikesByUser(@Body request: LikedPostRequest): Call<MutableList<Post>>
+
     companion object{
         operator fun invoke(): PostApi {
             return Retrofit.Builder().baseUrl("https://j4f-backend.herokuapp.com/")
