@@ -9,12 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.CommentUpdate
 import com.example.justice4families.model.Post
 import com.example.justice4families.model.PostRequest
-import com.example.justice4families.model.Update
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +27,12 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpdatesViewHolder {
         val itemView = inflater.inflate(R.layout.missed_message_card, parent, false)
+
+        if (context is NotificationActivity) {
+            val card: CardView = itemView.findViewById(R.id.comment_card)
+            card.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
+        }
+
         return UpdatesViewHolder(itemView)
     }
 
@@ -47,6 +54,13 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
         }
         else {
             holder.tvUpdateMsg.text = commentUpdate.commentUsername
+
+            if (context is MainActivity) {
+                holder.itemView.setOnClickListener{
+                    val intent = Intent(context, NotificationActivity::class.java)
+                    context.startActivity(intent)
+                }
+            }
         }
 
         if (commentUpdate.commentDatePosted != null) {
@@ -69,12 +83,16 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
     }
 
     fun setUpdates(items: ArrayList<CommentUpdate>, username: String) {
-        val lastCard = CommentUpdate (postID = null, postUsername = null, postTitle = null, postText = null, commentID = null,
-        commentUsername = "See notifications for more", commentDatePosted = null, commentText = null)
-        items.add(lastCard)
 
-        val filteredItems = items.filter { it.commentUsername != username }
-        this.items = filteredItems as ArrayList<CommentUpdate>
+        val filteredItems = items.filter { it.commentUsername != username } .reversed() as ArrayList<CommentUpdate>
+
+        if (context is MainActivity) {
+            val lastCard = CommentUpdate (postID = null, postUsername = null, postTitle = null, postText = null, commentID = null,
+                commentUsername = "See notifications for more", commentDatePosted = null, commentText = null)
+            filteredItems.add(lastCard)
+        }
+
+        this.items = filteredItems
         notifyDataSetChanged()
     }
 
