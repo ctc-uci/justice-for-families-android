@@ -146,7 +146,18 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
     @RequiresApi(Build.VERSION_CODES.O)
     fun setPost(post: Post) {
         username.text = if (post.anonymous!!) "Anonymous" else parseUsername(post.username)
-        checkUserLiked(post, savedPreferences.username)
+
+        if (context is ViewPostActivity) {
+            checkUserLiked(post, savedPreferences.username)
+        }
+
+        profileImage.setOnClickListener {
+            if (context !is UserProfileActivity && username.text != "Anonymous") {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("post_username", post.username)
+                context.startActivity(intent)
+            }
+        }
 
         if (post.datePosted?.length!! > 18) {
             val dateFromBackend = post.datePosted.substring(0, 10)
@@ -191,15 +202,6 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
         comment.setOnClickListener {
             comment_textfield?.requestFocus()
         }
-
-        if (context !is UserProfileActivity) {
-            profileImage.setOnClickListener {
-                val intent = Intent(context, UserProfileActivity::class.java)
-                intent.putExtra("post_username", post.username)
-                context.startActivity(intent)
-            }
-        }
-
     }
 
     private fun startHandler(runnable: Runnable) {

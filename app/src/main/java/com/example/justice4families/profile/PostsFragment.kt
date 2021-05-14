@@ -72,7 +72,7 @@ class PostsFragment(val type: Int) : Fragment() {
                     response: Response<MutableList<Post>>
                 ) {
                     if (response.isSuccessful) {
-                        postCollection = response.body()!!
+                        postCollection = response.body()!!.filter { post -> post.anonymous == false } as MutableList<Post>
                         progressbar.visibility = View.GONE
                         adapter.setPosts(postCollection)
                     } else if (response.code() == 400) {
