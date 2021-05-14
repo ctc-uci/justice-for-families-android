@@ -11,9 +11,7 @@ import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.justice4families.MainActivity
-import com.example.justice4families.R
-import com.example.justice4families.savedPreferences
+import com.example.justice4families.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
@@ -46,7 +44,10 @@ class UserProfileActivity : AppCompatActivity() {
             if(username != savedPreferences.username) loggedInUser = false
         }
 
-        user_name.text = username
+        val parsedUsername = parseUsername(username)
+
+        full_name.text = parsedUsername
+        user_name.text = "@$parsedUsername"
 
         if (!loggedInUser) {
             editProfileBtn.visibility = View.GONE
@@ -79,6 +80,10 @@ class UserProfileActivity : AppCompatActivity() {
                 }
                 R.id.ic_home -> {
                     val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.ic_notification -> {
+                    val intent = Intent(this, NotificationActivity::class.java)
                     startActivity(intent)
                 }
             }

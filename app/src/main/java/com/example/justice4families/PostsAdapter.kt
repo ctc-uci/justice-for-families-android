@@ -2,8 +2,10 @@ package com.example.justice4families
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.model.Post
 
@@ -22,6 +24,7 @@ class PostsAdapter(val context: Context) : RecyclerView.Adapter<postViewHolder>(
         return posts.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: postViewHolder, position: Int) {
         val post = posts[position]
         holder.setPost(post)

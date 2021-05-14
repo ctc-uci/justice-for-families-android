@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.PostsAdapter
 import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
+import com.example.justice4families.model.LikedPostRequest
 import com.example.justice4families.model.Post
+import com.example.justice4families.model.UpdatesRequest
 import kotlinx.android.synthetic.main.activity_view_post.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,13 +22,14 @@ import retrofit2.Response
 import java.util.ArrayList
 
 
-class PostsFragment : Fragment() {
+class PostsFragment(val type: Int) : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PostsAdapter
     private lateinit var userName: String
     var postCollection : MutableList<Post> = ArrayList()
     private lateinit var progressbar: ProgressBar
+    private var fragmentType = type
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +50,41 @@ class PostsFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager= LinearLayoutManager(requireContext())
         userName = (activity as UserProfileActivity).username
-
-        getUserPost()
+        if (fragmentType == 0) {
+            getUserPost()
+        }
+        else {
+            getLikedPost()
+        }
     }
 
     private fun getUserPost(){
         PostApi().getPostsByUsername(userName)
+            .enqueue(object : Callback<MutableList<Post>> {
+                override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                    Toast.makeText(activity, t.message.toString(), Toast.LENGTH_LONG)
+                        .show()
+                    println(t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Post>>,
+                    response: Response<MutableList<Post>>
+                ) {
+                    if (response.isSuccessful) {
+                        postCollection = response.body()!!.filter { post -> post.anonymous == false } as MutableList<Post>
+                        progressbar.visibility = View.GONE
+                        adapter.setPosts(postCollection)
+                    } else if (response.code() == 400) {
+                        Toast.makeText(activity, "Error finding posts", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    private fun getLikedPost(){
+        PostApi().getLikesByUser(LikedPostRequest(userName))
             .enqueue(object : Callback<MutableList<Post>> {
                 override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
                     Toast.makeText(activity, t.message.toString(), Toast.LENGTH_LONG)
@@ -78,7 +110,12 @@ class PostsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getUserPost()
+        if (fragmentType == 0) {
+            getUserPost()
+        }
+        else {
+            getLikedPost()
+        }
     }
 
     companion object {
@@ -94,9 +131,9 @@ class PostsFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance(sectionNumber: Int): PostsFragment {
-            return PostsFragment().apply {
+            return PostsFragment(sectionNumber).apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                    putInt(ARG_SECTION_NUMBER, sectionNumber + 1)
                 }
             }
         }
