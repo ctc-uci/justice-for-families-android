@@ -89,34 +89,36 @@
             app:layout_constraintTop_toBottomOf="@id/camera_toggle" />
 
         <View
-            android:layout_height="1dp"
             android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/edit_profile_section"
-            app:layout_constraintBottom_toTopOf="@id/tags_button"/>
+            app:layout_constraintBottom_toTopOf="@id/tags_button"
+            app:layout_constraintTop_toBottomOf="@+id/edit_profile_section" />
 
         <Button
             android:id="@+id/tags_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:text="Tags"
             android:backgroundTint="@color/louche"
-            android:textAlignment="textStart"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            style="?android:attr/borderlessButtonStyle"
             android:drawableEnd="@drawable/right_arrow"
+            android:text="Tags"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/logout_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/camera_toggle" />
 
         <View
-            android:layout_height="1dp"
             android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/tags_button"
-            app:layout_constraintBottom_toTopOf="@id/logout_button"/>
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/logout_button"
+            app:layout_constraintTop_toBottomOf="@+id/tags_button" />
 
         <Button
             android:id="@+id/logout_button"

@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="10dp"
-                    android:hint="@string/full_name"
+                    android:hint="@string/full_name_capitalized"
                     android:inputType="textPersonName" />
             </LinearLayout>
 

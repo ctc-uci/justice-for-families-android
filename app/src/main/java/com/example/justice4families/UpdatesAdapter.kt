@@ -88,7 +88,8 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
 
         if (context is MainActivity) {
             val lastCard = CommentUpdate (postID = null, postUsername = null, postTitle = null, postText = null, commentID = null,
-                commentUsername = "See notifications for more", commentDatePosted = null, commentText = null)
+                commentUsername = "Want to see more updates? Visit the notifications tab.", commentDatePosted = null, commentText = null)
+
             filteredItems.add(lastCard)
         }
 
