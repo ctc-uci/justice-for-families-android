@@ -26,23 +26,23 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        var loggedInUser = savedPreferences.loggedin
+        if(intent.hasExtra("post_username")){
+            username = intent.getStringExtra("post_username").toString()
+            if(username != savedPreferences.username) loggedInUser = false
+        }
+
         val sectionsPagerAdapter =
             SectionsPagerAdapter(
-                this,
+                this, loggedInUser,
                 supportFragmentManager
             )
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-        var loggedInUser = savedPreferences.loggedin
         val editProfileBtn: Button = findViewById(R.id.edit_profile_btn)
         val profileText: TextView = findViewById(R.id.profile_text)
-
-        if(intent.hasExtra("post_username")){
-            username = intent.getStringExtra("post_username").toString()
-            if(username != savedPreferences.username) loggedInUser = false
-        }
 
         val parsedUsername = parseUsername(username)
 
