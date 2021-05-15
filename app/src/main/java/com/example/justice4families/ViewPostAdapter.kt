@@ -5,17 +5,16 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Handler
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.Comment
@@ -29,8 +28,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
-
 
 class ViewPostAdapter(val context: Context, val comment_textfield: EditText): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var items = emptyList<Any>()
@@ -167,7 +164,15 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
             timeStamp.text = post.datePosted
         }
 
+        if (context is MainActivity) {
+            topicHeadline.ellipsize = TextUtils.TruncateAt.END
+            topicHeadline.maxLines = 1
+            postContent.maxLines = 3
+            postContent.ellipsize = TextUtils.TruncateAt.END
+        }
+
         postContent.text = post.text
+
         topicHeadline.text = post.title
         setTag(itemView, post.tags)
         likes = post.numLikes ?: 0
@@ -289,11 +294,10 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
 
             if (tagsList.size > 1) {
                 tag2.text = tagsList[1].removePrefix("#")
-            } else {
-                tag2.visibility = View.GONE
+            } else if (tag2.text == context.getString(R.string.post_tag_placeholder) || tag2.text == tag1.text) {
+                    tag2.visibility = View.GONE
             }
-
         }
-
     }
+
 }
