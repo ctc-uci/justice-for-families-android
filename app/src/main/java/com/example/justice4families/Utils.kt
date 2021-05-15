@@ -1,9 +1,11 @@
 package com.example.justice4families
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.os.Build
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
@@ -120,4 +122,16 @@ object savedPreferences{
                 it.putBoolean(LOGGED_IN.first, value)
             }
         }
+}
+
+fun ContentResolver.getFileName(fileUri: Uri): String {
+    var name = ""
+    val returnCursor = this.query(fileUri, null, null, null, null)
+    if (returnCursor != null) {
+        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        returnCursor.moveToFirst()
+        name = returnCursor.getString(nameIndex)
+        returnCursor.close()
+    }
+    return name
 }
