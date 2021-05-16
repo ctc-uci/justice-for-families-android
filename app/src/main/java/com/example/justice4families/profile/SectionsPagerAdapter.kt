@@ -16,7 +16,7 @@ private val TAB_TITLES = arrayOf(
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
+class SectionsPagerAdapter(private val context: Context, private val userLoggedIn: Boolean, fm: FragmentManager) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
@@ -29,7 +29,10 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
-        return 2
+        // Show 2 pages if it's logged in user's profile, else show 1 page
+        if (userLoggedIn) {
+            return 2
+        }
+        return 1
     }
 }

@@ -22,7 +22,7 @@ import retrofit2.Response
 import java.util.ArrayList
 
 
-class PostsFragment(val type: Int) : Fragment() {
+class PostsFragment(type: Int) : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PostsAdapter
