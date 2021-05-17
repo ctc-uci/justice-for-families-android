@@ -19,6 +19,8 @@ import com.example.justice4families.model.PostRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.UpdatesViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -84,7 +86,7 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
 
     fun setUpdates(items: ArrayList<CommentUpdate>, username: String) {
 
-        val filteredItems = items.filter { it.commentUsername != username } .reversed() as ArrayList<CommentUpdate>
+        val filteredItems = items.filter { it.commentUsername != username }.reversed().toMutableList()
 
         if (context is MainActivity) {
             val lastCard = CommentUpdate (postID = null, postUsername = null, postTitle = null, postText = null, commentID = null,
@@ -93,7 +95,7 @@ class UpdatesAdapter(val context: Context):RecyclerView.Adapter<UpdatesAdapter.U
             filteredItems.add(lastCard)
         }
 
-        this.items = filteredItems
+        this.items = filteredItems as ArrayList<CommentUpdate>
         notifyDataSetChanged()
     }
 
