@@ -1,7 +1,9 @@
 package com.example.justice4families.profile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,6 +15,8 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.justice4families.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
 class UserProfileActivity : AppCompatActivity() {
@@ -43,11 +47,29 @@ class UserProfileActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
         val editProfileBtn: Button = findViewById(R.id.edit_profile_btn)
         val profileText: TextView = findViewById(R.id.profile_text)
+        val profileImage: CircleImageView = findViewById(R.id.profile_pic)
+
+        if(intent.hasExtra("post_username")){
+            username = intent.getStringExtra("post_username").toString()
+            if(username != savedPreferences.username) loggedInUser = false
+        }
 
         val parsedUsername = parseUsername(username)
 
         full_name.text = parsedUsername
         user_name.text = "@$parsedUsername"
+
+        getProfilePic(username, callback = {
+            Log.d("Setting profile pic", it)
+            Picasso.get()
+                .load(it)
+                .placeholder(R.drawable.profileplaceholder)
+                .error(R.drawable.profileplaceholder)
+                .resize(110, 110)
+                .onlyScaleDown()
+                .centerCrop()
+                .into(profileImage)
+        })
 
         if (!loggedInUser) {
             editProfileBtn.visibility = View.GONE

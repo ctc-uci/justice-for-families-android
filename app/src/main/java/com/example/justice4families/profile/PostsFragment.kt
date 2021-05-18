@@ -14,8 +14,6 @@ import com.example.justice4families.R
 import com.example.justice4families.data.PostApi
 import com.example.justice4families.model.LikedPostRequest
 import com.example.justice4families.model.Post
-import com.example.justice4families.model.UpdatesRequest
-import kotlinx.android.synthetic.main.activity_view_post.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

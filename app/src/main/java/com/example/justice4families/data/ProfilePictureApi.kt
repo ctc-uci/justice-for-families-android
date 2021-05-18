@@ -1,9 +1,10 @@
 package com.example.justice4families.data
 
+import com.example.justice4families.model.EmailRequestBody
+import com.example.justice4families.model.LikedPostRequest
 import com.example.justice4families.model.S3ContentType
 import com.example.justice4families.model.S3URL
 import com.google.gson.annotations.SerializedName
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -25,6 +26,9 @@ interface ProfilePictureApi {
 
     @POST("authentication/update/picture")
     fun updateProfilePicture(@Body request: RequestBody) : Call<ResponseBody>
+
+    @POST("authentication/profilepic/get")
+    fun getProfilePicture(@Body request: EmailRequestBody): Call<ResponseBody>
 
     class EnumConverterFactory : Converter.Factory() {
         override fun stringConverter(

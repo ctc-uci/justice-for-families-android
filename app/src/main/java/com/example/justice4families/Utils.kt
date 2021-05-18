@@ -8,6 +8,12 @@ import android.provider.OpenableColumns
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.justice4families.data.ProfilePictureApi
+import com.example.justice4families.model.EmailRequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -96,6 +102,7 @@ object savedPreferences{
 
     private val LOGGED_IN = Pair("is_login", false)
     private val USERNAME = Pair("username", "")
+//    private val PROFILE_PIC = Pair("profilePic", "")
 
     fun init(context: Context) {
         preferences = context.getSharedPreferences("LoggedInData", Context.MODE_PRIVATE)
@@ -134,4 +141,27 @@ fun ContentResolver.getFileName(fileUri: Uri): String {
         returnCursor.close()
     }
     return name
+}
+
+fun getProfilePic(username: String, callback: (url: String) -> Unit) {
+    val request = EmailRequestBody(username)
+
+    ProfilePictureApi().getProfilePicture(request)
+        .enqueue(object : Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("Profile Picture", t.message.toString())
+            }
+
+            override fun onResponse(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    callback(body.string().toString())
+                } else {
+                    Log.d("Profile Picture", "failed api call to get pfp")
+                }
+            }
+        })
 }

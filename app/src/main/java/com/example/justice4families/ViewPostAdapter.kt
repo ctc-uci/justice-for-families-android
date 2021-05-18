@@ -17,11 +17,9 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
-import com.example.justice4families.model.Comment
-import com.example.justice4families.model.Like
-import com.example.justice4families.model.LikeResponse
-import com.example.justice4families.model.Post
+import com.example.justice4families.model.*
 import com.example.justice4families.profile.UserProfileActivity
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -37,7 +35,6 @@ class ViewPostAdapter(val context: Context, val comment_textfield: EditText): Re
         return when(viewType){
             0 -> {
                 val itemView = inflater.inflate(R.layout.view_post_card, parent, false)
-                //postViewHolder(context, itemView, bottomSheetBehavior)
                 postViewHolder(context, itemView, comment_textfield)
             }
             else -> {
@@ -77,6 +74,7 @@ class ViewPostAdapter(val context: Context, val comment_textfield: EditText): Re
         return items.size
     }
 }
+
 class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     val name: TextView = itemView.findViewById(R.id.post_username)
     val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
@@ -99,13 +97,13 @@ class commentsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     }
 }
 
-class postViewHolder(val context: Context, itemView: View, val comment_textfield: EditText?): RecyclerView.ViewHolder(
-    itemView
-) {
+class postViewHolder(val context: Context,
+                     itemView: View,
+                     val comment_textfield: EditText?) : RecyclerView.ViewHolder(itemView) {
     private val username: TextView = itemView.findViewById(R.id.post_username)
     private val timeStamp: TextView = itemView.findViewById(R.id.post_timestamp)
     private val postContent: TextView = itemView.findViewById(R.id.post_content)
-    val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
+    private val profileImage: CircleImageView = itemView.findViewById(R.id.profile_pic)
     private val topicHeadline: TextView = itemView.findViewById(R.id.topic_headline)
     private val like: TextView = itemView.findViewById(R.id.like_post)
     private val comment: TextView = itemView.findViewById(R.id.comment_post)
@@ -146,6 +144,20 @@ class postViewHolder(val context: Context, itemView: View, val comment_textfield
 
         if (context is ViewPostActivity) {
             checkUserLiked(post, savedPreferences.username)
+        }
+
+        if (post.anonymous == false) {
+            getProfilePic(post.username!!, callback = {
+                Log.d("Setting profile pic", it)
+                Picasso.get()
+                    .load(it)
+                    .placeholder(R.drawable.profileplaceholder)
+                    .error(R.drawable.profileplaceholder)
+                    .resize(50, 50)
+                    .onlyScaleDown()
+                    .centerCrop()
+                    .into(profileImage)
+            })
         }
 
         profileImage.setOnClickListener {
