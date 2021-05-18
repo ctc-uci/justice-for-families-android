@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         updatePost()
 
         swipeRefreshLayout.setOnRefreshListener {
-            Log.d("checking1", "Refreshing feed")
+            Log.d("Main Feed", "Refreshing feed")
             updatePost()
             loadMissedUpdates(savedPreferences.username)
             swipeRefreshLayout.isRefreshing = false

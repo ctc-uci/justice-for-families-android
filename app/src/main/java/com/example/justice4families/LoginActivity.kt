@@ -2,18 +2,20 @@ package com.example.justice4families
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.*
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.justice4families.data.AuthenticationApi
+import com.example.justice4families.data.ProfilePictureApi
+import com.example.justice4families.model.EmailRequestBody
+import com.example.justice4families.model.LikedPostRequest
 import com.example.justice4families.model.LoginRequest
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.hide_password
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.view.*
-import kotlinx.android.synthetic.main.activity_signup.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,8 +30,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if(savedPreferences.loggedin)
-        {
+        if(savedPreferences.loggedin) {
             val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
         }
@@ -97,11 +98,10 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if(response.isSuccessful)
-                    {
-                        //savedPreferences.setUserName(email)
-                        savedPreferences.username = email;
-                        savedPreferences.loggedin = true;
+                    if(response.isSuccessful) {
+                        savedPreferences.username = email
+                        savedPreferences.loggedin = true
+
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -120,6 +120,4 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
     }
-
-
 }
