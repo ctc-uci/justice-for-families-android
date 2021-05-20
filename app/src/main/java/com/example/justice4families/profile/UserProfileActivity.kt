@@ -1,5 +1,6 @@
 package com.example.justice4families.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,10 +21,14 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
 class UserProfileActivity : AppCompatActivity() {
+    companion object {
+        private const val EDIT_PROF = 1
+    }
 
     private lateinit var bottomNav: BottomNavigationView
     var username = savedPreferences.username
     lateinit var settingsMenu: Menu
+    lateinit var profileImage: CircleImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -47,7 +52,7 @@ class UserProfileActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
         val editProfileBtn: Button = findViewById(R.id.edit_profile_btn)
         val profileText: TextView = findViewById(R.id.profile_text)
-        val profileImage: CircleImageView = findViewById(R.id.profile_pic)
+        profileImage = findViewById(R.id.profile_pic)
 
         if(intent.hasExtra("post_username")){
             username = intent.getStringExtra("post_username").toString()
@@ -85,7 +90,8 @@ class UserProfileActivity : AppCompatActivity() {
 
         editProfileBtn.setOnClickListener{
             val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
+            Log.d("Edit Profile Result", "starting edit for result")
+            startActivityForResult(intent, EDIT_PROF)
         }
 
         bottomNav = findViewById(R.id.bottom_nav)
@@ -133,4 +139,28 @@ class UserProfileActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("Edit Profile Result", "back from editing profile")
+        if (requestCode == EDIT_PROF) {
+            if (resultCode == Activity.RESULT_OK) {
+                getProfilePic(username, callback = {
+                    Log.d("Setting profile pic", it)
+                    Picasso.get()
+                        .load(it)
+                        .placeholder(R.drawable.profileplaceholder)
+                        .error(R.drawable.profileplaceholder)
+                        .resize(110, 110)
+                        .onlyScaleDown()
+                        .centerCrop()
+                        .into(profileImage)
+                })
+                Log.d("Edit Profile Result", "User changed profile picture")
+            } else {
+                Log.d("Edit Profile Result", "User did not change profile picture")
+            }
+        }
+    }
+
 }

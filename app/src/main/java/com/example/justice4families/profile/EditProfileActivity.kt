@@ -38,6 +38,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     var didSaveEdits = true
+    var profilePicChanged = false
     lateinit var profileName: EditText
     lateinit var profileEmail: EditText
     lateinit var profilePwd: EditText
@@ -69,11 +70,14 @@ class EditProfileActivity : AppCompatActivity() {
             }
 
             didSaveEdits = true
+
         }
 
         backButton.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(this)
             if (didSaveEdits) {
+                val resultCode = if (profilePicChanged) Activity.RESULT_OK else Activity.RESULT_CANCELED
+                setResult(resultCode)
                 finish()
             } else {
                 dialogBuilder.setMessage("Are you sure you want to discard your changes?")
@@ -272,6 +276,8 @@ class EditProfileActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         Log.i("Edit Profile - POST", "Successfully updated image")
+                        Toast.makeText(applicationContext, "Changes saved.", Toast.LENGTH_LONG).show()
+                        profilePicChanged = true
                     } else {
                         Log.w("Edit Profile - POST",
                             "Error updating: ${response.errorBody()?.string()}")
