@@ -115,7 +115,7 @@ class UserProfileActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-            true
+            false
         }
     }
 
