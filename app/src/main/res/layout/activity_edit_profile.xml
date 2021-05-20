@@ -87,101 +87,103 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="@dimen/app_margins"
-                android:layout_marginEnd="6dp"
-                android:paddingBottom="16dp">
+                android:background="@color/white"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/full_name"
-                    android:textColor="@color/blue_gray"
-                    android:layout_gravity="center_vertical" />
-
-                <EditText
-                    android:id="@+id/edit_name_text_field"
+                <LinearLayout
+                    android:id="@+id/edit_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/full_name_capitalized"
-                    android:inputType="textPersonName" />
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/app_margins"
+                    android:layout_marginEnd="6dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
 
-            <LinearLayout
-                android:id="@+id/edit_email_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="@dimen/app_margins"
-                android:layout_marginEnd="6dp"
-                android:paddingBottom="16dp">
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/full_name"
+                        android:textColor="@color/blue_gray" />
 
-                <TextView
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textColor="@color/blue_gray"
-                    android:layout_gravity="center_vertical" />
+                    <EditText
+                        android:id="@+id/edit_name_text_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/full_name_capitalized"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_email_text_field"
+                <LinearLayout
+                    android:id="@+id/edit_email_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Email Address"
-                    android:inputType="textEmailAddress" />
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/app_margins"
+                    android:layout_marginEnd="6dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
 
-            <LinearLayout
-                android:id="@+id/edit_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="@dimen/app_margins"
-                android:layout_marginEnd="6dp"
-                android:paddingBottom="16dp">
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="Email"
+                        android:textColor="@color/blue_gray" />
 
-                <TextView
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password_capitalized"
-                    android:textColor="@color/blue_gray"
-                    android:layout_gravity="center_vertical"/>
+                    <EditText
+                        android:id="@+id/edit_email_text_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:hint="Email Address"
+                        android:inputType="textEmailAddress" />
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_password_text_field"
+                <LinearLayout
+                    android:id="@+id/edit_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/password_capitalized"
-                    android:inputType="textPassword"
-                    app:errorEnabled="true"
-                    app:passwordToggleEnabled="true"/>
+                    android:layout_marginStart="@dimen/app_margins"
+                    android:layout_marginEnd="6dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/password_capitalized"
+                        android:textColor="@color/blue_gray" />
+
+                    <EditText
+                        android:id="@+id/edit_password_text_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/password_capitalized"
+                        android:inputType="textPassword"
+                        app:errorEnabled="true"
+                        app:passwordToggleEnabled="true" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
