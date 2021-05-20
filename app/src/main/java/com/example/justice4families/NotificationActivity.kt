@@ -44,7 +44,6 @@ class NotificationActivity : AppCompatActivity() {
                 }
                 R.id.ic_profile -> {
                     val intent = Intent(this, UserProfileActivity::class.java)
-//                    intent.putExtra("profile_pic", savedPreferences.profilePic)
                     startActivity(intent)
                 }
                 R.id.ic_home -> {
@@ -52,7 +51,7 @@ class NotificationActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-            true
+            false
         }
     }
 

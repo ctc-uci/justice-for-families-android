@@ -136,6 +136,7 @@
         android:background="@color/louche"
         app:itemIconTint="@color/button_text_color"
         app:itemTextColor="@color/button_text_color"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

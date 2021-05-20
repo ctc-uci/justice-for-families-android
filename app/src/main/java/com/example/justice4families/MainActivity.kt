@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                     startActivity(intent)
                 }
             }
-            true
+            false
         }
 
         // Tags
