@@ -296,6 +296,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         swipeRefreshLayout.setOnRefreshListener {
             Log.d("Main Feed", "Refreshing feed")
+            findViewById<RecyclerView>(R.id.recyclerView).invalidate()
             updatePost()
             loadMissedUpdates(savedPreferences.username)
             swipeRefreshLayout.isRefreshing = false

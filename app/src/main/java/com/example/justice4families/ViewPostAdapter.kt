@@ -58,6 +58,7 @@ class ViewPostAdapter(val context: Context, val comment_textfield: EditText): Re
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Log.d("view post adapter bind", items[position].toString())
+        //holder.setIsRecyclable(false)
         if(getItemViewType(position) == 0){
             val post : Post = items[position] as Post
             val postViewHolder = holder as postViewHolder
@@ -158,6 +159,8 @@ class postViewHolder(val context: Context,
                     .centerCrop()
                     .into(profileImage)
             })
+        } else {
+            profileImage.setImageResource(R.drawable.profileplaceholder)
         }
 
         profileImage.setOnClickListener {
