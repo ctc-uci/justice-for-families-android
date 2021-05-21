@@ -285,6 +285,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         // recycle view
         layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         swipeContainer = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         var postRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         postRecyclerView.isNestedScrollingEnabled = false

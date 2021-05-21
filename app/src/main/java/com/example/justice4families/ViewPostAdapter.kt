@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.justice4families.data.PostApi
@@ -162,12 +163,18 @@ class postViewHolder(val context: Context,
         } else {
             profileImage.setImageResource(R.drawable.profileplaceholder)
         }
+        else {
+            profileImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.profileplaceholder))
+        }
 
         profileImage.setOnClickListener {
             if (context !is UserProfileActivity && username.text != "Anonymous") {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("post_username", post.username)
                 context.startActivity(intent)
+            }
+            else {
+                profileImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.profileplaceholder))
             }
         }
 
