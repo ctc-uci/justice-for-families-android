@@ -36,7 +36,7 @@ class PostsAdapter(val context: Context) : RecyclerView.Adapter<postViewHolder>(
     }
 
     fun setPosts(posts: List<Post>){
-        this.posts = posts.reversed()
+        this.posts = posts
         notifyDataSetChanged()
     }
 
