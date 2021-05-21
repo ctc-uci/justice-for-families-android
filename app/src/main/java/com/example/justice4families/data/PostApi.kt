@@ -1,8 +1,6 @@
 package com.example.justice4families.data
 
-import com.example.justice4families.model.Post
-import com.example.justice4families.model.Comment
-import com.example.justice4families.model.Like
+import com.example.justice4families.model.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -22,6 +20,12 @@ interface PostApi {
     @GET("comments/post/{postId}")
     fun getComments(@Path("postId") postId: String): Call<MutableList<Comment>>
 
+    @GET("posts/{postId}/user/{username}/hasLiked")
+    fun hasUserLiked(@Path("postId") postId: String, @Path("username") username: String) : Call<LikeResponse>
+
+    @POST("posts/id")
+    fun getPostById(@Body postRequest: PostRequest): Call<Post>
+
     @POST("comments/{postId}/comments/create")
     fun postComment(@Path("postId") postId:String, @Body comment: Comment): Call<ResponseBody>
 
@@ -33,6 +37,15 @@ interface PostApi {
 
     @POST("likes/unlike")
     fun unlikePost(@Body postLiked: Like): Call<ResponseBody>
+
+    @POST("activity")
+    fun getMissedActivity(@Body request: UpdatesRequest): Call<Update>
+
+    @GET("tags")
+    fun getAllTags(): Call<MutableList<String>>
+
+    @POST("/likes/byUser")
+    fun getLikesByUser(@Body request: LikedPostRequest): Call<MutableList<Post>>
 
     companion object{
         operator fun invoke(): PostApi {

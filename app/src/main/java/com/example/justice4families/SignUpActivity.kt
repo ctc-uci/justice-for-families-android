@@ -34,6 +34,7 @@ class SignUpActivity : AppCompatActivity() {
             checkInfo(email_signup.text.toString(), password.pass_text.text.toString(), confirm_pass.confirm_text.text.toString())
         }
         hide_password.setOnClickListener{
+            val cursorPosition: Int = pass_text.selectionStart
             if(!isPasswordVisible){
                 pass_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 isPasswordVisible = true
@@ -43,8 +44,10 @@ class SignUpActivity : AppCompatActivity() {
                 isPasswordVisible = false
                 hide_password.isActivated = false
             }
+            pass_text.setSelection(cursorPosition);
         }
         hide_password_confirm.setOnClickListener{
+            val cursorPosition: Int = confirm_text.selectionStart
             if(!isPasswordConfirmVisible){
                 confirm_text.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 isPasswordConfirmVisible = true
@@ -54,6 +57,7 @@ class SignUpActivity : AppCompatActivity() {
                 isPasswordConfirmVisible = false
                 hide_password_confirm.isActivated = false
             }
+            confirm_text.setSelection(cursorPosition);
         }
     }
 
@@ -86,9 +90,11 @@ class SignUpActivity : AppCompatActivity() {
                             response: Response<ResponseBody>
                         ) {
                             if(response.code()==200) {
-                                savedPreferences.setUserName(email)
+                                savedPreferences.username = email;
+                                savedPreferences.loggedin = true;
                                 val intent = Intent(applicationContext, MainActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             }
                             else{
                                 Toast.makeText(applicationContext, "Email or Password already exists", Toast.LENGTH_LONG).show()

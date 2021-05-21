@@ -21,12 +21,12 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:elevation="8dp"
-            android:text="Miseed Message"
-            android:textColor="@color/black"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:elevation="8dp"
+            android:padding="8dp"
+            android:text="Miseed Message"
+            android:textColor="@color/black"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -37,10 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="3m"
-            card_view:layout_constraintTop_toBottomOf="@id/message"
+            android:text=""
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent" />
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/message" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

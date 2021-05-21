@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/louche"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profile.SettingsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/settings_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="Settings"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/camera_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:backgroundTint="@color/louche"
+            android:paddingStart="16dp"
+            android:paddingTop="18dp"
+            android:text="Enable Camera"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/edit_profile_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.7"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/camera_toggle"
+            app:layout_constraintBottom_toTopOf="@id/edit_profile_section"/>
+
+        <Button
+            android:id="@+id/edit_profile_section"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="Edit Profile"
+            android:backgroundTint="@color/louche"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableEnd="@drawable/right_arrow"
+            app:layout_constraintBottom_toTopOf="@id/tags_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/camera_toggle" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@id/tags_button"
+            app:layout_constraintTop_toBottomOf="@+id/edit_profile_section" />
+
+        <Button
+            android:id="@+id/tags_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:backgroundTint="@color/louche"
+            android:drawableEnd="@drawable/right_arrow"
+            android:text="Tags"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/logout_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/camera_toggle" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/logout_button"
+            app:layout_constraintTop_toBottomOf="@+id/tags_button" />
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_out"
+            android:backgroundTint="@color/sky_blue"
+            android:textColor="@color/purple_500"
+            android:layout_marginTop="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/tags_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/delete_acct_button" />
+
+        <Button
+            android:id="@+id/delete_acct_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/pink"
+            android:text="@string/delete_account"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/logout_button"
+            app:layout_constraintTop_toBottomOf="@+id/tags_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

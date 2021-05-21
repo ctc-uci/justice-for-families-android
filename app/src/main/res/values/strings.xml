@@ -17,7 +17,7 @@
     <string name="not_a_member">Not a member?</string>
     <string name="email">email</string>
     <string name="confirm_password">confirm password</string>
-    <string name="name">name</string>
+    <string name="full_name">full name</string>
     <string name="sign_up">Sign Up</string>
     <string name="already_a_member">Already a member?</string>
     <string name="pass_req"> Password must contain at least
@@ -34,4 +34,19 @@
 
     <string name="create_account"><b>Create an account</b>,\nSign up to get started!</string>
 
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="log_out">Log Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="selected_tags_section_title">currently selected (%d of %d)</string>
+
+    <string name="password_capitalized">Password</string>
+    <string name="full_name_capitalized">Full Name</string>
+
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+
+    <string name="dne_tag_title">\'%1$s\' doesn\'t exist. Create a tag?</string>
+    <string name="dne_tag">+ %1$s</string>
+
+    <string name="post_tag_placeholder">[tags]</string>
+    <string name="profile">Profile</string>
 </resources>
